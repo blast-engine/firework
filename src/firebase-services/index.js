@@ -1,0 +1,5 @@
+export * from './create-get-fb-ref.function'
+export * from './create-get-fb-ref.function.mock'
+export * from './create-auth-emitter.function'
+export * from './create-auth-emitter.function.mock'
+export * from './create-firebase-service.function'
