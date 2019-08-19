@@ -1,6 +1,6 @@
 {
-  "name": "@smackchat/firework",
-  "version": "0.0.0",
+  "name": "@blast-engine/firework",
+  "version": "0.0.1",
   "main": "dist/firework.js",
   "scripts": {
     "test": "node ./scripts/test.js",
@@ -41,7 +41,7 @@
     ]
   },
   "dependencies": {
-    "@smackchat/utils": "^0.0.0",
+    "@blast-engine/utils": "^0.0.0",
     "@smackchat/mixable": "^0.0.0",
     "babel-core": "6.26.0",
     "babel-jest": "20.0.3",
