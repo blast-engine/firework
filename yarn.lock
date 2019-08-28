@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@blast-engine/utils@^0.0.0":
+"@blast-engine/utils@^0.0.3":
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@blast-engine/utils/-/utils-0.0.3.tgz#97faf481f94b9936435af4bb2eb9dc1c5f7b8100"
   integrity sha512-8RpSmKg3U4AgeEw9Jf9zGDAHr2ciYda6WxMOL+tH3ittbM/T+G8ZGw4oaSyujlQ7Mio3obkZp+tOqimxizDDvw==
