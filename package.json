@@ -41,7 +41,7 @@
     ]
   },
   "dependencies": {
-    "@blast-engine/utils": "^0.0.0",
+    "@blast-engine/utils": "^0.0.3",
     "@smackchat/mixable": "^0.0.0",
     "babel-core": "6.26.0",
     "babel-jest": "20.0.3",
