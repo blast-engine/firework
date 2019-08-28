@@ -1,7 +1,7 @@
-import { createMixableClass } from '@smackchat/mixable'
+import { createMixableClass } from '@blast-engine/mixable'
 import { ensure } from '../../ensure.function'
 import { Query } from '../query.class'
-import { isArray } from '@smackchat/utils'
+import { isArray } from '@blast-engine/utils'
 
 export const ArrayOfChildKeysQuery = createMixableClass({
   name: 'ArrayOfChildKeysQuery',

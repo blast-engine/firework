@@ -4,7 +4,7 @@ import Enzyme, { mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import { BrowserRouter as Router } from 'react-router-dom'
 
-import { assert, Emitter, keys, values, sleep } from '@smackchat/utils'
+import { assert, Emitter, keys, values, sleep } from '@blast-engine/utils'
 import { createFetcher } from '../fetchers'
 import { MockKernel } from '../kernel'
 import { nodeClassExamples, nodeDataExamples } from '../models'

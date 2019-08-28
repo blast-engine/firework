@@ -1,4 +1,4 @@
-import { doAsync } from '@smackchat/utils'
+import { doAsync } from '@blast-engine/utils'
 
 export const createArrayOfChildKeysWatcher = ({ query, getFbRef, onResultUpdated }) => {
 

@@ -1,5 +1,5 @@
-import { k, v } from '@smackchat/utils'
-import { assert } from '@smackchat/utils'
+import { k, v } from '@blast-engine/utils'
+import { assert } from '@blast-engine/utils'
 import { createMockGetFbRef } from '../../firebase-services'
 import { createFullNodeWatcher } from './full-node.watcher'
 import { nodeDataExamples, nodeClassExamples } from '../../models/node/create-node-class.function.examples'

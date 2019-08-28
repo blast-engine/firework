@@ -1,5 +1,5 @@
-import { createMixableClass } from '@smackchat/mixable'
-import { keys, kv } from '@smackchat/utils'
+import { createMixableClass } from '@blast-engine/mixable'
+import { keys, kv } from '@blast-engine/utils'
 import { Struct } from '../base'
 
 export const SelectionStruct = createMixableClass({

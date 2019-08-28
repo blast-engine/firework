@@ -1,4 +1,4 @@
-import { assert } from '@smackchat/utils'
+import { assert } from '@blast-engine/utils'
 import { arrayOfChildKeysQueryExamples } from './array-of-child-keys.query.examples'
 
 describe('create', () => {

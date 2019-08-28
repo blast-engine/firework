@@ -1,4 +1,4 @@
-import { noop, Emitter } from '@smackchat/utils'
+import { noop, Emitter } from '@blast-engine/utils'
 import { createLogin } from './create-login.function'
 import { createLoginAnon } from './create-login-anon.function'
 import { createSignup } from './create-signup.function'

@@ -1,6 +1,6 @@
-import { createMixableClass } from '@smackchat/mixable'
+import { createMixableClass } from '@blast-engine/mixable'
 import { ensure } from '../../ensure.function'
-import { isArray, isString} from '@smackchat/utils'
+import { isArray, isString} from '@blast-engine/utils'
 
 export const Model = createMixableClass({
   name: 'Model',

@@ -1,4 +1,4 @@
-import { keys } from '@smackchat/utils'
+import { keys } from '@blast-engine/utils'
 
 const parseDebugOpts = given => {
   if (!given) 

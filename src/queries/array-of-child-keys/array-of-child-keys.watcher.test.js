@@ -1,5 +1,5 @@
-import { k, v } from '@smackchat/utils'
-import { assert } from '@smackchat/utils'
+import { k, v } from '@blast-engine/utils'
+import { assert } from '@blast-engine/utils'
 import { createMockGetFbRef } from '../../firebase-services'
 import { nodeDataExamples, nodeClassExamples } from '../../models'
 import { arrayOfChildKeysQueryExamples } from './array-of-child-keys.query.examples'

@@ -1,7 +1,7 @@
 import access from 'safe-access'
 
-import { createMixableClass, isMixableInstance } from '@smackchat/mixable'
-import { keys, kv, values } from '@smackchat/utils'
+import { createMixableClass, isMixableInstance } from '@blast-engine/mixable'
+import { keys, kv, values } from '@blast-engine/utils'
 import { Struct } from '../base'
 import { flagSymbol } from '../flag-symbol.function'
 

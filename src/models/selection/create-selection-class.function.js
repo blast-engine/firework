@@ -1,4 +1,4 @@
-import { createMixableClass, isMixableClass } from '@smackchat/mixable'
+import { createMixableClass, isMixableClass } from '@blast-engine/mixable'
 import { ensure } from '../../ensure.function'
 import { Struct, Ref } from '../base'
 import { SelectionRef } from './selection-ref.class'

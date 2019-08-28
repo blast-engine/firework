@@ -1,4 +1,4 @@
-import { createMixableClass } from '@smackchat/mixable'
+import { createMixableClass } from '@blast-engine/mixable'
 import { Ref } from '../base'
 import { ArrayOfChildKeysQuery } from '../../queries'
 

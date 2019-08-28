@@ -1,5 +1,5 @@
-import { k } from '@smackchat/utils'
-import { createMixableClass, isMixableClass, isMixableInstance } from '@smackchat/mixable'
+import { k } from '@blast-engine/utils'
+import { createMixableClass, isMixableClass, isMixableInstance } from '@blast-engine/mixable'
 import { Struct } from '../base'
 
 export const Assembly = createMixableClass({

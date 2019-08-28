@@ -1,4 +1,4 @@
-import { isMixableInstance } from '@smackchat/mixable'
+import { isMixableInstance } from '@blast-engine/mixable'
 import { Model } from './model.class'
 
 export const isModel = thing => {

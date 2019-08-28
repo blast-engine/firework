@@ -1,4 +1,4 @@
-import { assert } from '@smackchat/utils'
+import { assert } from '@blast-engine/utils'
 import { fullNodeQueryExamples } from './full-node.query.examples'
 
 describe('FullNodeQuery', () => {

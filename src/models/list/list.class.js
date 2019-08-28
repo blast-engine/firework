@@ -1,5 +1,5 @@
-import { createMixableClass } from '@smackchat/mixable'
-import { kv, k, m } from '@smackchat/utils'
+import { createMixableClass } from '@blast-engine/mixable'
+import { kv, k, m } from '@blast-engine/utils'
 import { Full } from '../base'
 import { ListRef } from './list-ref.class'
 import { ListStruct } from './list-struct.class'

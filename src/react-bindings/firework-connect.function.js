@@ -1,5 +1,5 @@
 import React from 'react'
-import { kv, kvr, k, m, shallowClone} from '@smackchat/utils'
+import { kv, kvr, k, m, shallowClone} from '@blast-engine/utils'
 let j = undefined
 export const createFireworkConnect = ({ kernel }) => (
   createInstructionsMap = () => ({}), 

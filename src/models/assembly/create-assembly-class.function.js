@@ -1,5 +1,5 @@
-import { createMixableClass, isMixableClass } from '@smackchat/mixable'
-import { objMap, keys, values, kv, objForEach } from '@smackchat/utils'
+import { createMixableClass, isMixableClass } from '@blast-engine/mixable'
+import { objMap, keys, values, kv, objForEach } from '@blast-engine/utils'
 import { Assembly } from './assembly.class'
 
 export function createAssemblyClass({

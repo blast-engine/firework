@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@blast-engine/mixable@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@blast-engine/mixable/-/mixable-0.0.3.tgz#2f800343cbf9b74c0de6a5697cf5f616fcb0ed20"
+  integrity sha512-cxV1ImAwCuABLnDyDOi0bXs+fQcgSGK7IKqHYb+ZngZU/5EqQNzhimWA7t/diJ6EyD5t8FGdBWmP1DhUO4vGRA==
+
 "@blast-engine/utils@^0.0.3":
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@blast-engine/utils/-/utils-0.0.3.tgz#97faf481f94b9936435af4bb2eb9dc1c5f7b8100"
@@ -35,20 +40,6 @@
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/@sinonjs/text-encoding/-/text-encoding-0.7.1.tgz#8da5c6530915653f3a1f38fd5f101d8c3f8079c5"
   integrity sha512-+iTbntw2IZPb/anVDbypzfQa+ay64MW0Zo8aJ8gZPWMMK6/OubMVb6lUPMagqjOPnmtauXnFCACVl3O7ogjeqQ==
-
-"@smackchat/mixable@^0.0.0":
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/@smackchat/mixable/-/mixable-0.0.0.tgz#ab9cee998b0c235588d1ed06c1eb2ed575d41f5b"
-  integrity sha512-gGrXrB2Z4jXt7fYs1Q6w4ywkyH+Sg1ypO3atKu+OAqT7Vkv1YwRhmjz8V9cjfMBTuhstS0j0yYCcceqPEDV7vg==
-  dependencies:
-    babel-core "6.26.0"
-    babel-jest "20.0.3"
-    babel-loader "7.1.2"
-    babel-preset-react-app "^3.1.1"
-    babel-runtime "6.26.0"
-    jest "20.0.4"
-    webpack "^4.25.1"
-    webpack-cli "^3.1.2"
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"

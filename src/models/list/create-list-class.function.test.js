@@ -1,4 +1,4 @@
-import { isMixableInstance } from '@smackchat/mixable'
+import { isMixableInstance } from '@blast-engine/mixable'
 import { Ref, Struct } from '../base'
 import { createListClass } from './create-list-class.function'
 import { createNodeClass } from './../node'

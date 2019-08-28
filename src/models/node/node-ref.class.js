@@ -1,6 +1,6 @@
-import { createMixableClass } from '@smackchat/mixable'
+import { createMixableClass } from '@blast-engine/mixable'
 import { Ref } from '../base'
-import { merge } from '@smackchat/utils'
+import { merge } from '@blast-engine/utils'
 import { flagSymbol } from '../flag-symbol.function'
 import { FullNodeQuery } from '../../queries'
 

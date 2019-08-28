@@ -1,4 +1,4 @@
-import { createMixableClass } from '@smackchat/mixable'
+import { createMixableClass } from '@blast-engine/mixable'
 import { Model } from './model.class'
 
 export const Ref = createMixableClass({

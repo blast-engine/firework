@@ -1,4 +1,4 @@
-import { kv, v, keys, doAsync, values } from '@smackchat/utils'
+import { kv, v, keys, doAsync, values } from '@blast-engine/utils'
 import { AuthStruct } from '../models'
 import { SPECIAL_DEPENDENCIES } from './kernel.class'
 

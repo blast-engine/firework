@@ -1,5 +1,5 @@
-import { assert, Emitter } from '@smackchat/utils'
-import { createMixableClass } from '@smackchat/mixable'
+import { assert, Emitter } from '@blast-engine/utils'
+import { createMixableClass } from '@blast-engine/mixable'
 import { createNodeClass, createAssemblyClass, flagSymbol } from '../models'
 import { FullNodeQuery, createMockCreateWatcher } from '../queries'
 import { createFetcher } from '../fetchers'

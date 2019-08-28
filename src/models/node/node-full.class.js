@@ -1,4 +1,4 @@
-import { createMixableClass } from '@smackchat/mixable'
+import { createMixableClass } from '@blast-engine/mixable'
 import { Full } from '../base'
 import { NodeRef } from './node-ref.class'
 import { NodeStruct } from './node-struct.class'

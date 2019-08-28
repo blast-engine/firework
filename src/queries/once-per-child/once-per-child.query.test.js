@@ -1,4 +1,4 @@
-import { assert } from '@smackchat/utils'
+import { assert } from '@blast-engine/utils'
 import { oncePerChildQueryExamples } from './once-per-child.query.examples'
 
 describe('createOncePerChildWatcher', () => {

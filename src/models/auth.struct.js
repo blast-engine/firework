@@ -1,4 +1,4 @@
-import { createMixableClass } from '@smackchat/mixable'
+import { createMixableClass } from '@blast-engine/mixable'
 import { Struct } from './base'
 
 export const AuthStruct = createMixableClass({

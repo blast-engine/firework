@@ -1,5 +1,5 @@
-import { createMixableClass, isMixableClass, isMixableInstance } from '@smackchat/mixable'
-import { keys } from '@smackchat/utils'
+import { createMixableClass, isMixableClass, isMixableInstance } from '@blast-engine/mixable'
+import { keys } from '@blast-engine/utils'
 import { Ref } from '../base'
 import { FullNodeQuery } from '../../queries'
 

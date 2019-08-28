@@ -1,4 +1,4 @@
-import { createMixableClass } from '@smackchat/mixable'
+import { createMixableClass } from '@blast-engine/mixable'
 import { ensure } from '../ensure.function'
 
 export const Query = createMixableClass({
