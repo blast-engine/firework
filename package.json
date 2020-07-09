@@ -1,6 +1,6 @@
 {
   "name": "@blast-engine/firework",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "dist/firework.js",
   "scripts": {
     "test": "node ./scripts/test.js",
@@ -41,8 +41,8 @@
     ]
   },
   "dependencies": {
-    "@blast-engine/utils": "^0.0.3",
     "@blast-engine/mixable": "^0.0.3",
+    "@blast-engine/utils": "^0.0.3",
     "babel-core": "6.26.0",
     "babel-jest": "20.0.3",
     "babel-loader": "7.1.2",
