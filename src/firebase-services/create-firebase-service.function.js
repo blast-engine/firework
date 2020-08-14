@@ -22,7 +22,7 @@ export const createFirebaseService = ({ firebase, adminMode }) => {
 
   const fbSignup = createSignup(firebase)
   const signup = (...args) => fbSignup(...args)
-    .then(({ user }) => {
+    .then(user => { // this should be ({ user }) if using firebase client version >7 (we use 7.9.0)
       shouldRefreshAuth.emit(user)
       return user
     })
