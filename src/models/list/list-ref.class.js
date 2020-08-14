@@ -53,6 +53,10 @@ export const ListRef = createMixableClass({
       return newItemRef.initialize({ id: newItemId, ...initArgs })
     }
 
+    remove(id) {
+      this._update({ [id]: null })
+    }
+
     _strPath(subPath /* undefined | string (shallow path) | Array<string> */ ) {
       return this._pathToString(this._path(subPath))
     }
