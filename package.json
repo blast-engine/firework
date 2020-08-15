@@ -1,6 +1,6 @@
 {
   "name": "@blast-engine/firework",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/firework.js",
   "scripts": {
     "test": "node ./scripts/test.js",
