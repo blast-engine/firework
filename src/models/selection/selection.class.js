@@ -12,6 +12,7 @@ export const Selection = createMixableClass({
     _constructor(args = {}) {
       this._onModelConstructed(() => {
         this.itemsKV = kv(args.data)
+          .filter(({ k }) => this.keys.includes(k))
           .map(({ k, v:data }) => ({
             k,
             v: this._spinoff(this._class().item(), { 
