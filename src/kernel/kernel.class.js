@@ -43,22 +43,23 @@ export class Kernel {
       nextAuthHandlerId: 0,
       externalAuthHandlers: {},
       timeDelta: undefined, // @todo: FIXX!X!
-      now: undefined // @todo: FIXX!X!
+      now: undefined, // @todo: FIXX!X!,
+      watchers: []
     }
 
     // put fbservice stuff in kernel api
     Object.assign(this, this.args.fbService)
-
+ 
     this.args.onAuthStateChanged(authState => this._handleAuthChange(authState))
     this.args.fbService.shouldRefreshAuth.subscribe(authState => this._handleAuthChange(authState))
   
-    // @todo: FIX THIS RACE CONDITION
-    // @todo: this should be a kernel provision like 'auth'
-    this.args.fbService.fetchTimeDelta()
-      .then(timeDelta => {
-        this.state.timeDelta = timeDelta
-        this.state.now = () => Date.now() + timeDelta
-      })
+    // // @todo: FIX THIS RACE CONDITION
+    // // @todo: this should be a kernel provision like 'auth'
+    // this.args.fbService.fetchTimeDelta()
+    //   .then(timeDelta => {
+    //     this.state.timeDelta = timeDelta
+    //     this.state.now = () => Date.now() + timeDelta
+    //   })
   }
 
   timeDelta() {
@@ -87,7 +88,7 @@ export class Kernel {
     const request = this.state.requests[reqId]
 
     values(request.watchers)
-      .forEach(watcher => watcher.kill())
+      .forEach(watcher => watcher.removeReq(request.id))
 
     request.dead = true
 
@@ -323,34 +324,45 @@ export class Kernel {
   _resetWatcher(request, stepName, query) {
 
     if (request.watchers[stepName])
-      request.watchers[stepName].kill()
+      request.watchers[stepName].removeReq(request.id)
 
-    const watcher = this.args.createWatcher({ 
-      query, 
-      getFbRef: this._getFbRef, 
-      onResultUpdated: () => {
-        
-        // debug
-        if (request.instructions.debug.kernel)
-          console.log(
-            'watcher fired for ' + request.instructions.name, 
-            'step ' + stepName,
-            watcher.result
-          )
-
-        this._requestFlush(request.id, stepName)
-      }
+    const existingWatcher = this.state.watchers.find(({ query: q }) => {
+      return q.equals(query)
     })
 
-    // @todo: kind of a hack?
-    watcher.query = query
+    if (existingWatcher) {
+      existingWatcher.watcher.requests.push(request.id)
+      request.watchers[stepName] = existingWatcher.watcher 
+    } else {
+      let watcher
+      watcher = this.args.createWatcher({ 
+        query, 
+        getFbRef: this._getFbRef, 
+        onResultUpdated: () => {
+          watcher.requests.forEach(reqId => this._requestFlush(reqId))
+        }
+      })
+ 
+      this.state.watchers.push({ watcher, query })
   
-    request.watchers[stepName] = watcher
+      watcher.query = query
+      watcher.requests = [ request.id ]
+      watcher.removeReq = reqId => {
+        watcher.requests = watcher.requests.filter(rId => rId !== reqId)
+        if (!watcher.requests.length) { 
+          this.state.watchers = this.state.watchers.filter(w => w.watcher !== watcher)
+          watcher.kill()
+        }
+      }
+    
+      request.watchers[stepName] = watcher 
+      watcher.start()
+    }
   }
 
   _clearWatcher(request, stepName) {
     if (!request.watchers[stepName]) return
-    request.watchers[stepName].kill()
+    request.watchers[stepName].removeReq(request.id)
     delete request.watchers[stepName]
   }
 
@@ -358,6 +370,7 @@ export class Kernel {
   _setNullWatcher(request, stepName) {
     request.watchers[stepName] = { 
       result: null,
+      removeReq: () => {},
       kill(){}
     }
   }

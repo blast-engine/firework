@@ -1,8 +1,9 @@
 {
   "name": "@blast-engine/firework",
-  "version": "2.0.0",
+  "version": "0.1.4",
   "main": "dist/firework.js",
   "scripts": {
+    "t": "t",
     "test": "node ./scripts/test.js",
     "test:watch": "node ./scripts/test.js --watch ",
     "test:debug": "node --inspect-brk ./scripts/test.js --watch ",
