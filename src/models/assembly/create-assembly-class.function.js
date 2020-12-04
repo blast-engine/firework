@@ -33,6 +33,8 @@ export function createAssemblyClass({
       const Member = memberModels[memberName]
       if (Member.prototype[method]) 
         body.prototype[rename] = function(...args) {
+          if (!this.members[memberName]) 
+            throw new Error(`${memberName} not given for ${name}`)
           return this.members[memberName][method](...args)
         }
     })

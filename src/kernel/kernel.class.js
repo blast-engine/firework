@@ -101,6 +101,7 @@ export class Kernel {
       performUpdates: u => this.fbService().performUpdates(u),
       performTransaction: t => this.fbService().performTransaction(t),
       doAction: (...args) => this.doAction(...args),
+      kernel: this,
       auth: this.state.auth,
       ...args
     })
