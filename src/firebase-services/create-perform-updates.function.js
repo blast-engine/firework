@@ -1,4 +1,4 @@
-import { keys } from '@blast-engine/utils'
+import { keys, flattenDeep } from '@blast-engine/utils'
 
 export const createTransaction = arrayOfUpdates /* Array<Update> */ => {
 
@@ -51,6 +51,10 @@ export const transactionsAreSame = ( t1, t2 ) => {
 
 export const createPerformUpdates = 
   firebase => 
-  updates => 
-    firebase.database().ref().update(createTransaction(updates))  
+  updates => {
+    const updatesArray = Array.isArray(updates) ? updates : [ updates ]
+    const flatUpdates = flattenDeep(updatesArray)
+    return firebase.database().ref().update(createTransaction(flatUpdates))  
+  }
+    
 

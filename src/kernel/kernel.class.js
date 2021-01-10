@@ -95,14 +95,29 @@ export class Kernel {
     delete this.state.requests[reqId]
   }
 
-  async doAction(action, args = {}) {
-    return action({
+  async doAction(action, args = {}, extraServices = {}) {
+    
+    const getDataRef = path => this.firebase.database().ref(path)
+    const getDataAtPath = async path => (await getDataRef(path).once('value')).val()
+    const setDataAtPath = async (path, value) => getDataRef(path).set(value)
+    const doTransactionAtPath = async (path, fn) => getDataRef(path).transaction(fn)
+
+    const services = {
+      getDataRef,
+      getDataAtPath,
+      setDataAtPath,
+      doTransactionAtPath,
       snap: instructions => this.snap(instructions),
       performUpdates: u => this.fbService().performUpdates(u),
       performTransaction: t => this.fbService().performTransaction(t),
       doAction: (...args) => this.doAction(...args),
       kernel: this,
       auth: this.state.auth,
+      ...extraServices
+    }
+    return action({
+      services,
+      ...services,
       ...args
     })
   }
