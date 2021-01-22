@@ -21,7 +21,7 @@ export const createFireworkConnect = ({ kernel }) => (
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const instructionsMap = createInstructionsMap(nextProps)
+    const instructionsMap = createInstructionsMap({ ...nextProps, root: kernel.root })
     const provisioningFactory = createProvisioningFactory(nextProps)
 
     const updatedInstructions = kv(instructionsMap)
@@ -32,7 +32,11 @@ export const createFireworkConnect = ({ kernel }) => (
 
     const activeRequests = prevState.activeRequests
     updatedInstructions.forEach(name => { 
-      if (activeRequests[name]) activeRequests[name].kill()
+      if (activeRequests[name]) {
+        // we dont support updating fetcher instructions yet
+        // kernel.updateRequest(activeRequests[name].id, instructionsMap[name])
+        activeRequests[name].kill()
+      }
       activeRequests[name] = kernel.createRequest(instructionsMap[name])
     })
 

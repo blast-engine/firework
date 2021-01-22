@@ -22,10 +22,11 @@ export const SelectionRef = createMixableClass({
       return new ArrayOfChildKeysQuery({
         path: this._strPath(),
         childKeys: this.keys,
-        instantiate: data => this._spinoff(this._class().full(), {
+        instantiate: (data, context) => this._spinoff(this._class().full(), {
           path: this.path,
           keys: this.keys,
-          data: data
+          data: data,
+          context
         })
       })
     }    

@@ -1,5 +1,5 @@
 import { createMixableClass } from '@blast-engine/mixable'
-import { kv, m, kvr } from '@blast-engine/utils'
+import { kv, m, kvr, k } from '@blast-engine/utils'
 import { Full } from '../base'
 import { SelectionRef } from './selection-ref.class'
 import { SelectionStruct } from './selection-struct.class'
@@ -11,17 +11,38 @@ export const Selection = createMixableClass({
 
     _constructor(args = {}) {
       this._onModelConstructed(() => {
-        this.itemsKV = kv(args.data)
-          .filter(({ k }) => this.keys.includes(k))
-          .map(({ k, v:data }) => ({
-            k,
-            v: this._spinoff(this._class().item(), { 
-              path: this._pathToArray(args.path).concat([ k ]),
-              data
+        const { updatedKey, previous } = args.context || {}
+
+        if (previous && updatedKey) {
+
+          const updatedItem = this._spinoff(this._class().item(), { 
+            path: this._pathToArray(args.path).concat([ updatedKey ]),
+            data: args.data[updatedKey]
+          })
+
+          this.itemsKV = k(args.data)
+            .filter(k => this.keys.includes(k))
+            .map(k => {
+              if (k !== updatedKey) return { k, v: previous.items[k] }
+              return { k, v: updatedItem }
             })
-          }))
+
+        } else {     
+
+          this.itemsKV = kv(args.data)
+            .filter(({ k }) => this.keys.includes(k))
+            .map(({ k, v:data }) => ({
+              k,
+              v: this._spinoff(this._class().item(), { 
+                path: this._pathToArray(args.path).concat([ k ]),
+                data
+              })
+            }))
+
+        }
 
         this.items = kvr(this.itemsKV)
+       
       })
     }
 

@@ -84,17 +84,6 @@ export class Kernel {
     delete this.state.externalAuthHandlers[handlerId]
   }
 
-  destroyRequest(reqId) {
-    const request = this.state.requests[reqId]
-
-    values(request.watchers)
-      .forEach(watcher => watcher.removeReq(request.id))
-
-    request.dead = true
-
-    delete this.state.requests[reqId]
-  }
-
   async doAction(action, args = {}, extraServices = {}) {
     
     const getDataRef = path => this.firebase.database().ref(path)
@@ -108,11 +97,13 @@ export class Kernel {
       setDataAtPath,
       doTransactionAtPath,
       snap: instructions => this.snap(instructions),
+      snapQuery: query => this.snapQuery(query),
       performUpdates: u => this.fbService().performUpdates(u),
       performTransaction: t => this.fbService().performTransaction(t),
       doAction: (...args) => this.doAction(...args),
       kernel: this,
       auth: this.state.auth,
+      root: this.root,
       ...extraServices
     }
     return action({
@@ -133,6 +124,13 @@ export class Kernel {
 
     this.state.currentlyFlushing = undefined
     this.args.didFlush()
+  }
+
+  async snapQuery(query) {
+    return await this.args.snapQuery({ 
+      query, 
+      getFbRef: this.args.fbService.getRef 
+    })
   }
 
   async snap(instructions) {
@@ -164,6 +162,22 @@ export class Kernel {
       root: this.root,
       auth: this.state.auth
     })
+  }
+
+  // updateRequest(reqId, updatedInstructions) {
+  //   const request = this.state.requests[reqId]
+  //   debugger
+  // }
+
+  destroyRequest(reqId) {
+    const request = this.state.requests[reqId]
+
+    values(request.watchers)
+      .forEach(watcher => watcher.removeReq(request.id))
+
+    request.dead = true
+
+    delete this.state.requests[reqId]
   }
 
   createRequest(instructions) {
@@ -219,7 +233,7 @@ export class Kernel {
     request.emitter = emitter
     
     this.state.requests[reqId] = request
-    this._requestFlush(reqId, 'not-being-used')
+    this._requestFlush(reqId)
 
     return request
   }
@@ -339,8 +353,7 @@ export class Kernel {
 
   _resetWatcher(request, stepName, query) {
 
-    if (request.watchers[stepName])
-      request.watchers[stepName].removeReq(request.id)
+    const prevWatcher = request.watchers[stepName]
 
     const existingWatcher = this.state.watchers.find(({ query: q }) => {
       return q.equals(query)
@@ -353,7 +366,7 @@ export class Kernel {
       let watcher
       watcher = this.args.createWatcher({ 
         query, 
-        getFbRef: this._getFbRef, 
+        prevWatcher,
         onResultUpdated: () => {
           watcher.requests.forEach(reqId => this._requestFlush(reqId))
         }
@@ -371,6 +384,7 @@ export class Kernel {
         }
       }
     
+      if (prevWatcher) prevWatcher.removeReq(request.id)
       request.watchers[stepName] = watcher 
       watcher.start()
     }

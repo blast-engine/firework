@@ -2,13 +2,21 @@ export const createFullNodeWatcher = ({ query, getFbRef, onResultUpdated }) => {
 
   let ref
   let watcher = {
+    lastInstantiated: undefined,
     result: undefined,
     onResultUpdated,
   }
 
   const handler = snapshot => {
-    watcher.result = query.instantiate(snapshot.val())
-    watcher.onResultUpdated()
+    watcher.lastInstantiated = query.instantiate(snapshot.val())
+    if (
+      typeof query.shouldEmitNext !== 'function'
+      || !watcher.result
+      || query.shouldEmitNext(watcher.result, watcher.lastInstantiated)
+    ) {
+      watcher.result = watcher.lastInstantiated
+      watcher.onResultUpdated()
+    }
   }
 
   const start = () => {

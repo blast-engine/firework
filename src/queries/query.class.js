@@ -9,6 +9,7 @@ export const Query = createMixableClass({
       ensure('child sets this.type', () => !!this._type)
       ensure('query is given an instantiate function', () => !!args.instantiate)
       this._args = args
+      this._shouldEmitNext = args.shouldEmitNext
       this._instantiate = args.instantiate
     }
 
@@ -36,8 +37,13 @@ export const Query = createMixableClass({
       return this._type
     }
 
-    instantiate(data){
-      return this._instantiate(data)
+    shouldEmitNext(prev, next) {
+      if (!this._shouldEmitNext) return true
+      return this._shouldEmitNext(prev, next)
+    }
+
+    instantiate(data, context){
+      return this._instantiate(data, context)
     }
 
     equals(query) {
