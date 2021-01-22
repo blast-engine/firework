@@ -352,7 +352,6 @@ export class Kernel {
   }
 
   _resetWatcher(request, stepName, query) {
-
     const prevWatcher = request.watchers[stepName]
 
     const existingWatcher = this.state.watchers.find(({ query: q }) => {
@@ -360,9 +359,12 @@ export class Kernel {
     })
 
     if (existingWatcher) {
+    
       existingWatcher.watcher.requests.push(request.id)
       request.watchers[stepName] = existingWatcher.watcher 
+    
     } else {
+
       let watcher
       watcher = this.args.createWatcher({ 
         query, 

@@ -1,38 +1,61 @@
-import { doAsync } from '@blast-engine/utils'
+import { doAsync, v } from '@blast-engine/utils'
 
 export const createArrayOfChildKeysWatcher = ({ query, getFbRef, prevWatcher, onResultUpdated }) => {
 
   const watcher = {
-    activeRefs: [],
+    refListeners: {},
     data: {},
     lastInstantiated: undefined,
     result: undefined,
     onResultUpdated
   }
 
-  const builtOnTopOfExisting = (
+  const buildUsingExisting = (
     prevWatcher && 
     prevWatcher.query.type === query.type && 
     prevWatcher.query.path === query.path
   )  
 
-  console.log({
-    builtOnTopOfExisting,
-    prevWatcher,
-    watcher
-  })
-
-  let ignoreDataStream = false 
-
-  if (builtOnTopOfExisting) {
+  if (buildUsingExisting) {
     watcher.data = prevWatcher.data
     watcher.lastInstantiated = prevWatcher.lastInstantiated
     watcher.result = prevWatcher.result
   }
 
-  const handlerWithKey = key => snapshot => {
-    if (ignoreDataStream) return
+  const createRefListener = ({ path }) => {
+    const listener = { path, handlers: [] }
+    const internalHandler = (...args) => 
+      setTimeout(() => listener.handlers.forEach(h => h.fn(...args)))
+    
+    const ref = getFbRef(path)
 
+    listener.ref = ref
+    listener.dead = false
+    listener.started = false
+
+    listener.attach = ({ fn, identifier }) => {
+      if (listener.handlers.find(h => h.identifier === identifier)) return
+      listener.handlers = listener.handlers.filter(h => h.identifier !== identifier)
+      listener.handlers = listener.handlers.concat({ fn, identifier })
+    }
+
+    listener.detach = ({ identifier }) => {
+      listener.handlers = listener.handlers.filter(h => h.identifier !== identifier)
+      if (listener.handlers.length) return
+      ref.off('value', internalHandler)
+      listener.dead = true
+    } 
+
+    listener.start = () => {
+      if (listener.started) return
+      ref.on('value', internalHandler)
+      listener.started = true
+    }
+
+    return listener
+  }
+
+  const handlerWithKey = key => snapshot => {
     watcher.data = { ...watcher.data, [key]: snapshot.val() }
 
     const haveAllKeys = query.childKeys()
@@ -57,16 +80,14 @@ export const createArrayOfChildKeysWatcher = ({ query, getFbRef, prevWatcher, on
 
   const start = () => {
     query.childKeys().forEach(key => {
-      const ref = getFbRef(query.path() + '/' + key)
+      const path = query.path() + '/' + key
       const handler = handlerWithKey(key)
-      const ignoreSynchronousDataEvents = (
-        builtOnTopOfExisting &&
-        prevWatcher.query.childKeys().includes(key)
-      )
-      if (ignoreSynchronousDataEvents) ignoreDataStream = true
-      ref.on('value', handler)
-      ignoreDataStream = false
-      watcher.activeRefs.push({ ref, handler })
+      const refListener = (buildUsingExisting && prevWatcher.refListeners[path])
+        ? prevWatcher.refListeners[path]
+        : createRefListener({ path }) 
+      refListener.attach({ fn: handler, identifier: watcher })
+      refListener.start()
+      watcher.refListeners[path] = refListener
     })
     
     if (!query.childKeys().length)
@@ -77,8 +98,11 @@ export const createArrayOfChildKeysWatcher = ({ query, getFbRef, prevWatcher, on
   }
 
   watcher.start = start
-  watcher.kill = () => watcher.activeRefs
-      .forEach(({ ref, handler }) => ref.off('value', handler))
+  watcher.kill = () => {
+    watcher.dead = true
+    v(watcher.refListeners)
+      .forEach(rl => rl.detach(watcher))
+  }
 
   return watcher
 
