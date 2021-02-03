@@ -12,6 +12,8 @@ export const Node = createMixableClass({
       // empty object is an empty update
       return this.isEmpty() ? this.initialize() : {}
     }
+
+    get(path) { return this._data(path) }
     
   }
 })

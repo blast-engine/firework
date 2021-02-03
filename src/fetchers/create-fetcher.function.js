@@ -20,7 +20,10 @@ export const createFetcher =
     name: opts.name,
     args,
     debug: parseDebugOpts(args.debug),
-    keepOldResultUntilNew: args.keepOldResultUntilNew,
+    keepOldResultUntilNew: 
+      typeof args.keepOldResultUntilNew === 'undefined' 
+        ? true 
+        : args.keepOldResultUntilNew,
     ...deriveInstructions(args),
     equals: other => {
       if (other.name !== opts.name) return false

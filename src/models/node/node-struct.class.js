@@ -5,6 +5,7 @@ import { shallowClone } from '@blast-engine/utils'
 import { Struct } from '../base'
 import { flagSymbol } from '../flag-symbol.function'
 
+// @deprecated
 export const NodeStruct = createMixableClass({
   name: 'NodeStruct',
   inherits: [ Struct ],
@@ -13,6 +14,8 @@ export const NodeStruct = createMixableClass({
     _constructor(params = {}) {
       this._ensure('NodeStruct is given `data` in constructor', () => 'data' in params)
       this.data = params.data
+      if (this.data && typeof this.data === 'object') 
+        delete this.data._
     }
 
     place(path) {
@@ -77,7 +80,8 @@ export const NodeStruct = createMixableClass({
      *    if you override this one, you should also override WithPath._prepareUpdateData()
      */
     _waitingForParts(){
-      return !this.data[flagSymbol()]
+      return false
+      // return !this.data[flagSymbol()]
     }
   }
 })

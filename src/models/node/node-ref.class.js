@@ -15,10 +15,15 @@ export const NodeRef = createMixableClass({
     }
 
 
+    // @deprecated
     fill(data) {
       const FullModel = this._class().full()
       return this._spinoff(FullModel, { path: this._path(), data })
     }
+
+    // NEW
+    set(path, value) { return this._update({ [path]: value }) }
+    initialize(initData) { return this._update(initData) }
     
     /**
      * @override
@@ -92,7 +97,8 @@ export const NodeRef = createMixableClass({
      *    if you override this one, you should also override WithData._waitingForParts()
      */
     _prepareUpdateData(updateData /* serializable obj */ ) {
-      return merge(updateData, { [flagSymbol()]: true })
+      return updateData 
+      // return merge(updateData, { [flagSymbol()]: true }) // @DEPRECATED
     }
 
   }
