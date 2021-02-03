@@ -1,6 +1,6 @@
 {
   "name": "@blast-engine/firework",
-  "version": "2.0.15",
+  "version": "2.0.16",
   "main": "dist/firework.js",
   "scripts": {
     "t": "t",
