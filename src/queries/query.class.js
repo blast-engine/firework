@@ -11,6 +11,7 @@ export const Query = createMixableClass({
       this._args = args
       this._shouldEmitNext = args.shouldEmitNext
       this._instantiate = args.instantiate
+      this.isQuery = true
     }
 
     _ensure(rule, pass) {
