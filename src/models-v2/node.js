@@ -134,8 +134,4 @@ export class NodeFullV2 extends NodeRefV2 {
     return this._data
   }
 
-  // move away
-  getAsArray(path) {
-    if (!path) 
-  }
 } 
