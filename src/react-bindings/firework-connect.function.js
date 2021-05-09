@@ -20,9 +20,12 @@ export const createFireworkConnect = ({ kernel }) => (
       awaitingSubscription: [],
     }
 
+    Component = Component
+
     _isMounted = false
 
     createSubscriptionHandler = (name, emitter) => result => {
+      if (!this._isMounted) debugger
       this.setState({ resultUpdated: name })
     }
 
@@ -141,9 +144,11 @@ export const createFireworkConnect = ({ kernel }) => (
     }
 
     componentWillUnmount() {
+      debugger
       const { activeRequests } = this.state
       k(activeRequests).forEach(name => activeRequests[name].kill())
-      this.__isMounted = false
+      kernel.unsubscribeToAuth(this.authSubscriberId)
+      this._isMounted = false
     }
 
     updateSubscriptions() { 
