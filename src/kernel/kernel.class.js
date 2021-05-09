@@ -110,7 +110,7 @@ export class Kernel {
       r: this.root,
       ...extraServices
     }
-    debugger
+
     return action({
       services,
       ...services,
