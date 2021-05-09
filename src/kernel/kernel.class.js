@@ -105,6 +105,9 @@ export class Kernel {
       kernel: this,
       auth: this.state.auth,
       root: this.root,
+      rootRef: this.root,
+      rr: this.root,
+      r: this.root,
       ...extraServices
     }
     return action({
