@@ -5,6 +5,8 @@ export const Query = createMixableClass({
   name: 'Query',
   body: class {
 
+    isFireworkQuery() { return true }
+
     _constructor(args = {}) {
       ensure('child sets this.type', () => !!this._type)
       ensure('query is given an instantiate function', () => !!args.instantiate)

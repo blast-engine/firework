@@ -27,25 +27,14 @@ export const createFireworkConnect = ({ kernel }) => (
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-      const _instructionsMap = createInstructionsMap({ ...nextProps, root: kernel.root })
-      const provisioningFactory = createProvisioningFactory(nextProps)
-
-      const instructionsMap = objMap(_instructionsMap, (inst, name) => {
-        if (!inst.isQuery) return inst
-        const query = inst
-        return createFetcher({
-          name: 'anon-query_component-${componentFireworkId}_${name}'
-        }, () => ({
-          steps: [{
-            name: 'node',
-            query: ({ root }) => query
-          }],
-          final: {
-            take: [ 'node' ],
-            instantiate: ({ node }) => node
-          }
-        }))()
+      const instructionsMap = createInstructionsMap({ 
+        props: nextProps, 
+        root: kernel.root, 
+        rootRef: kernel.root, 
+        rr: kernel.root, 
+        r: kernel.root 
       })
+      const provisioningFactory = createProvisioningFactory(nextProps)
 
       const updatedInstructions = kv(instructionsMap)
         .filter(({ k:name, v:newInst }) => {

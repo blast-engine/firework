@@ -1,6 +1,7 @@
 import { kv, keys, doAsync, values } from '@blast-engine/utils'
 import { AuthStruct } from '../models'
 import { isReady } from '../is-ready.function'
+import { instructionsFromQuery } from '../fetchers'
 
 export const SPECIAL_DEPENDENCIES = {
   AUTH: 'auth'
@@ -183,6 +184,15 @@ export class Kernel {
   createRequest(instructions) {
     const reqId = `request_${this.state.nextRequestId++}`
 
+    if (!instructions.isFireworkInstructions) {
+      if (instructions.isFireworkQuery) {
+        instructions = instructionsFromQuery(instructions)
+      } else {
+        console.error(`invalid instructions`, instructions)
+        throw new Error(`invalid instructions`)
+      }
+    }
+
     // debug
     if (instructions.debug.kernel)
       console.log('creating request ' + instructions.name)
@@ -268,11 +278,13 @@ export class Kernel {
       // compute query
       const query = step.query({
         ...stepDepResults.map,
-        rootRef: this.root, // deprecated
+        rootRef: this.root,
         root: this.root,
+        rr: this.root, 
+        r: this.root,
         auth: this.state.auth,
         timeDelta: this.state.timeDelta,
-        now: this.state.now
+        now: this.state.now,
       })
  
       // handle null query
