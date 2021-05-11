@@ -147,8 +147,10 @@ export class Kernel {
     // do each step in sequence
     const data = { 
       auth: this.state.auth, 
-      rootRef: this.root, // deprecated
-      root: this.root 
+      rootRef: this.root,
+      root: this.root,
+      rr: this.root,
+      r: this.root
     }
 
     for(let i = 0; i < instructions.steps.length; i++) {
