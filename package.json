@@ -1,8 +1,10 @@
 {
   "name": "@blast-engine/firework",
-  "version": "2.0.36",
+  "version": "2.0.37",
   "main": "dist/firework.js",
   "scripts": {
+    "scratchpad": "node --inspect ./scripts/scratchpad.script.js",
+    "scratchpad:brk": "node --inspect-brk ./scripts/scratchpad.script.js",
     "t": "t",
     "test": "node ./scripts/test.js",
     "test:watch": "node ./scripts/test.js --watch ",
