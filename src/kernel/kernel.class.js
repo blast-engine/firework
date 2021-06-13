@@ -24,16 +24,9 @@ export class Kernel {
     args.didFlush = args.didFlush || (() => undefined)
     this.args = args
 
-    // backwards compat (use Root)
-    this.root = this.args.rootRef
-    if (this.args.Root) {
-      this.root = new this.args.Root({
-        fbService: {
-          newKey: this.args.fbService.newKey,
-          timestamp: this.args.fbService.timestamp
-        }
-      })
-    }
+    if (!this.args.root) throw new Error('root not provided')
+    this.root = this.args.root
+
 
     this.state = {
       nextRequestId: 0,
@@ -50,7 +43,12 @@ export class Kernel {
 
     // put fbservice stuff in kernel api
     Object.assign(this, this.args.fbService)
- 
+    this.signup = async args => {
+      if (!this.auth()) throw new Error('we have no anon to sign up with')
+      if (!this.auth().isAnon()) throw new Error('auth not anonynmous')
+      return this.args.fbService.signup({ ...args, anonId: this.auth().id() })
+    }
+
     this.args.onAuthStateChanged(authState => this._handleAuthChange(authState))
     this.args.fbService.shouldRefreshAuth.subscribe(authState => this._handleAuthChange(authState))
   
@@ -139,6 +137,14 @@ export class Kernel {
   }
 
   async snap(instructions) {
+    if (!instructions.isFireworkInstructions) {
+      if (instructions.isFireworkQuery) {
+        instructions = instructionsFromQuery(instructions)
+      } else {
+        console.error(`invalid instructions`, instructions)
+        throw new Error(`invalid instructions`)
+      }
+    }
 
     // check we need/have auth
     const needsAuth = instructions.steps.some(step => (step.requires || []).includes('auth'))
@@ -426,7 +432,6 @@ export class Kernel {
   }
 
   async _handleAuthChange(auth) {
-
     if (auth) {
       this.state.auth = this.root._spinoff(AuthStruct, {
         data: {
@@ -437,7 +442,7 @@ export class Kernel {
         }
       })
     } else {
-      if (auth === null) 
+      if (auth === null && this.args.autoAnon) 
         this.fbService().loginAnon()
       
       this.state.auth = undefined

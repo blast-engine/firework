@@ -12,7 +12,7 @@ import { changePassword } from './change-password.function'
 import { changeEmail } from './change-email.function'
  
 
-export const createFirebaseService = ({ firebase, adminMode }) => {
+export const createFirebaseAdapter = ({ firebase, adminMode }) => {
 
   // refactor signup? 
   //   signup using credential link doesnt 
@@ -69,6 +69,7 @@ export const createFirebaseService = ({ firebase, adminMode }) => {
     onAuthStateChanged: adminMode? noop : createAuthEmitter(firebase), // @todo: fix name (not an emitter)
     shouldRefreshAuth,
     performUpdates: createPerformUpdates(firebase),
+    update: createPerformUpdates(firebase),
     timestamp: createSvTimestamp(firebase),
     getRef: createGetFbRef(firebase),
     newKey: createCreateNewKey(firebase),

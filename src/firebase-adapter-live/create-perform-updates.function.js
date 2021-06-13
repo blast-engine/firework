@@ -20,7 +20,7 @@ export const createTransaction = arrayOfUpdates /* Array<Update> */ => {
 
   var arrayOfArraysOfIndividualUpdates = arrayOfUpdates
     .map(nestedObject => nestedObjectToArrayOfIndividualUpdates(nestedObject))
-
+    
   const arrayOfFbUpdateGroups = arrayOfArraysOfIndividualUpdates
     .map(fbUpdates => fbUpdates.reduce((fbUpdatesGroup, fbUpdate) => {
   		return Object.assign({},

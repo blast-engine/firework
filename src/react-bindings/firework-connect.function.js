@@ -5,12 +5,12 @@ import { createFetcher } from '../fetchers'
 
 let compIdCounter = 0
 
-export const createFireworkConnect = ({ kernel }) => (
+export const createFireworkConnect = ({ kernel, services, config }) => (
   createInstructionsMap = () => ({}), 
   createProvisioningFactory = () => ({})
 ) => Component => {
   let componentFireworkId = `component_${compIdCounter++}`
-  return class extends React.PureComponent {
+  return class FireworkProvider extends React.PureComponent {
 
     state = {
       props: {},

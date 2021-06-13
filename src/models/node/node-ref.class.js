@@ -1,6 +1,6 @@
 import { createMixableClass } from '@blast-engine/mixable'
 import { Ref } from '../base'
-import { merge } from '@blast-engine/utils'
+import { merge, objMap } from '@blast-engine/utils'
 import { flagSymbol } from '../flag-symbol.function'
 import { FullNodeQuery } from '../../queries'
 
@@ -14,22 +14,20 @@ export const NodeRef = createMixableClass({
       this.path = params.path
     }
 
-
     // @deprecated
     fill(data) {
       const FullModel = this._class().full()
       return this._spinoff(FullModel, { path: this._path(), data })
     }
 
-    // NEW
     set(path, value) { return this._update({ [path]: value }) }
-    initialize(initData) { return this._update(initData) }
     
     /**
      * @override
      */
-    initialize() {
-      return this._update({ [flagSymbol()]: true })
+    initialize(initData) {
+      const cleanInitData = objMap(initData, v => v === undefined ? null : v)
+      return this._update(cleanInitData)
     }
 
     /**
