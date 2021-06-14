@@ -2,7 +2,9 @@ import { Kernel } from './kernel'
 import { createCreateWatcher, snapQuery } from './queries'
 import { createFirebaseAdapter } from './firebase-adapter-live'
 import { createMockFirebaseAdapter } from './firebase-adapter-mock'
+import { createFireworkConnect } from './react-bindings'
 
+// @todo: add rules interpreter
 // @todo: do adminMode properly (there's no auth in that case)
 export const createFireworkService = 
   ({ 
@@ -16,7 +18,7 @@ export const createFireworkService =
 
     if (!mock && !firebase) 
       throw new Error('must provide firebase client if not mock')
-
+    debugger
     const fbAdapter = mock 
       ? createMockFirebaseAdapter()
       : createFirebaseAdapter({ firebase })
