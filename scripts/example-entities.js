@@ -1,6 +1,6 @@
 const u = require('@blast-engine/utils')
 const { createMixableClass } = require('@blast-engine/mixable')
-const { Model, createNodeClass } = require('../dist/firework')
+import { Model, createNodeClass } from '@/firework'
 
 const ServerConfig = createNodeClass({
   name: 'ServerConfig',
