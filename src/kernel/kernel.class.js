@@ -41,6 +41,8 @@ export class Kernel {
       watchers: []
     }
 
+    this.fbService = this.args.fbService
+
     // put fbservice stuff in kernel api
     Object.assign(this, this.args.fbService)
     this.signup = async args => {

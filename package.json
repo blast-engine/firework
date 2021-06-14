@@ -1,16 +1,42 @@
 {
   "name": "@blast-engine/firework",
-  "version": "2.0.37",
+  "version": "2.0.38",
   "main": "dist/firework.js",
   "scripts": {
     "scratchpad": "node --inspect ./scripts/scratchpad.script.js",
     "scratchpad:brk": "node --inspect-brk ./scripts/scratchpad.script.js",
+    "scratchpad:babel": "export NODE_ENV='development'; babel-node --inspect ./scripts/scratchpad.script.js",
+    "scratchpad:babel:brk": "babel-node --inspect-brk ./scripts/scratchpad.script.js",
     "t": "t",
     "test": "node ./scripts/test.js",
     "test:watch": "node ./scripts/test.js --watch ",
     "test:debug": "node --inspect-brk ./scripts/test.js --watch ",
     "build": "webpack",
     "build:watch": "webpack --watch"
+  },
+  "dependencies": {
+    "@babel/cli": "7.14.5",
+    "@babel/core": "7.14.5",
+    "@babel/node": "7.14.5",
+    "@babel/plugin-proposal-class-properties": "7.13.0",
+    "@babel/plugin-proposal-private-methods": "7.14.5",
+    "@babel/plugin-proposal-private-property-in-object": "7.14.5",
+    "@babel/preset-react": "7.14.5",
+    "@blast-engine/mixable": "^2.0.0",
+    "@blast-engine/utils": "^2.0.0",
+    "babel-jest": "27.0.2",
+    "babel-loader": "8.2.2",
+    "babel-plugin-module-resolver": "4.1.0",
+    "babel-plugin-named-asset-import": "0.3.7",
+    "babel-plugin-transform-class-properties": "6.24.1",
+    "babel-runtime": "6.26.0",
+    "jest": "20.0.4",
+    "raf": "3.4.1",
+    "react": "17.0.2",
+    "safe-access": "0.1.0",
+    "sinon": "11.1.1",
+    "webpack": "5.38.1",
+    "webpack-cli": "4.7.2"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -37,26 +63,5 @@
       "jsx",
       "node"
     ]
-  },
-  "babel": {
-    "presets": [
-      "react-app"
-    ]
-  },
-  "dependencies": {
-    "@blast-engine/mixable": "^2.0.0",
-    "@blast-engine/utils": "^2.0.0",
-    "babel-core": "6.26.0",
-    "babel-jest": "20.0.3",
-    "babel-loader": "7.1.2",
-    "babel-preset-react-app": "^3.1.1",
-    "babel-runtime": "6.26.0",
-    "jest": "20.0.4",
-    "raf": "^3.4.1",
-    "react": "^16.6.3",
-    "safe-access": "^0.1.0",
-    "sinon": "^7.2.2",
-    "webpack": "^4.25.1",
-    "webpack-cli": "^3.1.2"
   }
 }

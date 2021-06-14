@@ -2,7 +2,7 @@ const u = require('@blast-engine/utils')
 const { createMixableClass } = require('@blast-engine/mixable')
 const { Model, createNodeClass } = require('../dist/firework')
 
-ServerConfig = createNodeClass({
+const ServerConfig = createNodeClass({
   name: 'ServerConfig',
 
   full: class {
@@ -19,7 +19,7 @@ ServerConfig = createNodeClass({
 
 })
 
-RootRef = createMixableClass({
+const RootRef = createMixableClass({
   name: 'RootRef',
   inherits: [ Model ],
   body: class {

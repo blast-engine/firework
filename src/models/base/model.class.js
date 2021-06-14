@@ -6,7 +6,8 @@ export const Model = createMixableClass({
   name: 'Model',
   body: class {
 
-    _constructor({ fbService } = {}) {
+    _constructor({ fbService, config } = {}) {
+      this._config = config
       this._fbService = fbService
       this._fb = fbService
       ;(this.onConstructCallbacks || []).forEach(c => c())

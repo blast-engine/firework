@@ -5,7 +5,7 @@ import { createFetcher } from '../fetchers'
 
 let compIdCounter = 0
 
-export const createFireworkConnect = ({ kernel, services, config }) => (
+export const createFireworkConnect = ({ fwService, config }) => (
   createInstructionsMap = () => ({}), 
   createProvisioningFactory = () => ({})
 ) => Component => {
@@ -31,10 +31,10 @@ export const createFireworkConnect = ({ kernel, services, config }) => (
     static getDerivedStateFromProps(nextProps, prevState) {
       const instructionsMap = createInstructionsMap({ 
         props: nextProps, 
-        root: kernel.root, 
-        rootRef: kernel.root, 
-        rr: kernel.root, 
-        r: kernel.root 
+        root: fwService.root, 
+        rootRef: fwService.root, 
+        rr: fwService.root, 
+        r: fwService.root 
       })
       const provisioningFactory = createProvisioningFactory(nextProps)
 
@@ -48,10 +48,10 @@ export const createFireworkConnect = ({ kernel, services, config }) => (
       updatedInstructions.forEach(name => { 
         if (activeRequests[name]) {
           // we dont support updating fetcher instructions yet
-          // kernel.updateRequest(activeRequests[name].id, instructionsMap[name])
+          // fwService.updateRequest(activeRequests[name].id, instructionsMap[name])
           activeRequests[name].kill()
         }
-        activeRequests[name] = kernel.createRequest(instructionsMap[name])
+        activeRequests[name] = fwService.createRequest(instructionsMap[name])
       })
 
       const propsUpdated = kv(nextProps)
@@ -93,7 +93,7 @@ export const createFireworkConnect = ({ kernel, services, config }) => (
             .every(dName => activeRequests[dName].result !== undefined)
           && (
             !((p.requires || {}).data || []).includes('auth')
-            || kernel.auth()
+            || fwService.auth()
           )
         ) {
 
@@ -109,13 +109,13 @@ export const createFireworkConnect = ({ kernel, services, config }) => (
           )
 
           if (((p.requires || {}).data || []).includes('auth'))
-            dataArgs.auth = kernel.auth()
+            dataArgs.auth = fwService.auth()
 
-          // @todo!: add to kernel provisioning system (like 'auth'), right now FAKING IT
-          dataArgs.timeDelta = kernel.timeDelta()
-          dataArgs.now = kernel.state.now
+          // @todo!: add to fwService provisioning system (like 'auth'), right now FAKING IT
+          dataArgs.timeDelta = fwService.timeDelta()
+          dataArgs.now = fwService.state.now
 
-          provisions[pName] = p.make(m(propArgs, dataArgs, { fb: kernel.fbService(), kernel }))
+          provisions[pName] = p.make(m(propArgs, dataArgs, { fb: fwService.fbService(), fwService }))
         }
       })
 
@@ -139,13 +139,13 @@ export const createFireworkConnect = ({ kernel, services, config }) => (
       this.updateSubscriptions()
 
       const authHandler = this.createSubscriptionHandler('auth')
-      this.authSubscriberId = kernel.subscribeToAuth(authHandler)
+      this.authSubscriberId = fwService.subscribeToAuth(authHandler)
     }
 
     componentWillUnmount() {
       const { activeRequests } = this.state
       k(activeRequests).forEach(name => activeRequests[name].kill())
-      kernel.unsubscribeToAuth(this.authSubscriberId)
+      fwService.unsubscribeToAuth(this.authSubscriberId)
       this._isMounted = false
     }
 
@@ -170,16 +170,15 @@ export const createFireworkConnect = ({ kernel, services, config }) => (
           results, { [name]: request.result }
         ), {})
 
-      if (kernel.auth()) 
-        data.auth = kernel.auth()
+      if (fwService.auth()) 
+        data.auth = fwService.auth()
       
       // @todo
-      data.timeDelta = kernel.timeDelta()
-      data.now = kernel.state.now
+      data.timeDelta = fwService.timeDelta()
+      data.now = fwService.state.now
 
       return <Component
-        fb={kernel.fbService()}
-        kernel={kernel}
+        fw={fwService}
         {...this.props}
         {...this.state.provisions}
         {...data}
