@@ -18,7 +18,7 @@ export const createFireworkService =
 
     if (!mock && !firebase) 
       throw new Error('must provide firebase client if not mock')
-    debugger
+
     const fbAdapter = mock 
       ? createMockFirebaseAdapter()
       : createFirebaseAdapter({ firebase })

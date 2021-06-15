@@ -21,7 +21,8 @@ export class MockFirebaseClient {
     await u.timeout(this.updateSubscriptions)
   } 
 
-  getValueAndMetaForPathArr = (pathArr) => {
+  getValueAndMetaForPathArr = path => {
+    const pathArr = this.pathAs('arr', path)
     const value = u.get(this.state.data, pathArr.join('.')) || null
     const meta = u.get(this.state.meta, pathArr.join('.')) || null
     return { value, meta }
@@ -35,15 +36,28 @@ export class MockFirebaseClient {
   }
 
   updateSubscriptions = () => {
-    Object.values(this.state.subscriptions).forEach(subscription => {
-      const dataNode = this.getValueAndMetaForPathArr(subscription.query.path)
-      subscription.last = dataNode.value
-      if (subscription.lastEmitted !== subscription.last) {
-        subscription.lastEmitted = subscription.last
-        const fbSnapshot = createFBSnapshot({ value: subscription.lastEmitted })
-        subscription.onNext(fbSnapshot)
-      }
+    Object.values(this.state.subscriptions).forEach(subsForPath => {
+      subsForPath.forEach((sub, handler) => {
+        if (sub.dead) return subsForPath.delete(handler)
+        const dataNode = this.getValueAndMetaForPathArr(sub.query.path)
+        sub.last = dataNode.value
+        if (sub.lastEmitted !== sub.last) {
+          sub.lastEmitted = sub.last
+          const fbSnapshot = createFBSnapshot({ value: sub.lastEmitted })
+          sub.onNext(fbSnapshot)
+        }
+      })
     })
+  }
+
+  killSubsription = query => {
+    const strPath = this.pathAs('str', query.path)
+    const allSubs = this.state.subscriptions
+    const subsForPath = allSubs[strPath]
+    if (!subsForPath) return
+    const sub = subsForPath.get(query.handler)
+    sub.kill()
+    subsForPath.delete(query.handler)
   }
 
   createSubscription = query => {
@@ -56,29 +70,47 @@ export class MockFirebaseClient {
       kill: () => subscription.dead = true
     }
 
-    this.state.subscriptions[subscription.id] = subscription
+    const path = query.path
+    const strPath = this.pathAs('str', path)
+    const allSubs = this.state.subscriptions
+    if (!allSubs[strPath]) allSubs[strPath] = new Map()
+    const subsForPath = allSubs[strPath]
+    subsForPath.set(subscription.query.handler, subscription)
     u.timeout(this.updateSubscriptions)
-
     return subscription
   }
 
-  getFbRef = (pathStrOrArr) => {
-    const path = (typeof pathStrOrArr === 'string')
-      ? pathStrOrArr.split(/\.|\//)
-      : pathStrOrArr
-      
+  pathAs = (requestedType, path, delimiter = '/') => {
+    if (u.isStr(path)) {
+      if (requestedType === 'str') return path
+      else return path.split(/\.|\//)
+    }
+
+    if (!u.isArr(path)) throw new Error('invalid path')
+    if (requestedType === 'str') return path.join(delimiter)
+    else return path
+  }
+
+  getFbRef = (path) => {
+    const ensureEventIsSuported = event => {
+      if (event !== 'value') 
+        throw new Error('only support value event rn :3')
+    }
     return {
       on: (event, handler) => {
-        if (event === 'value') {
-          const query = { path, handler }
-          this.createSubscription(query)
-        }
+        ensureEventIsSuported(event)
+        const query = { path, handler }
+        this.createSubscription(query)
       },
       once: async (event) => {
-        if (event === 'value') {
-          const query = { path }
-          return this.snap(query)
-        }
+        ensureEventIsSuported(event)
+        const query = { path }
+        return this.snap(query)
+      },
+      off: (event, handler) => {
+        ensureEventIsSuported(event)
+        const query = { path, handler }
+        this.killSubsription(query)
       }
     }
   }
