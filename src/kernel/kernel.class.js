@@ -331,8 +331,18 @@ export class Kernel {
             nextResult
           )
 
+        if (nextResult && !request.gotFirstResult) {
+          console.log('perf: first result', { request, result: nextResult })
+          request.gotFirstResult = true
+        }
+        
         request.result = nextResult
+       
+        const startTimestamp = Date.now()
         request.emitter.emit()
+        const endTimestamp = Date.now()
+        const duration = endTimestamp - startTimestamp
+        console.log('perf: emit result', { duration, startTimestamp, request, result: nextResult })
       }
     }
 
