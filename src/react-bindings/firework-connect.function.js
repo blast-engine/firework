@@ -179,6 +179,7 @@ export const createFireworkConnect = ({ fwService, config }) => (
 
       return <Component
         fw={fwService}
+        root={rfService}
         {...this.props}
         {...this.state.provisions}
         {...data}
