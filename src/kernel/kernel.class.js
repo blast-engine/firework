@@ -455,7 +455,7 @@ export class Kernel {
       })
     } else {
       if (auth === null && this.args.autoAnon) 
-        this.fbService().loginAnon()
+        this.fbService.loginAnon()
       
       this.state.auth = undefined
     }
