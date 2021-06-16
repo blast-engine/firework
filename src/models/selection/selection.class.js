@@ -13,7 +13,8 @@ export const Selection = createMixableClass({
       this._onModelConstructed(() => {
         const { updatedKey, previous } = args.context || {}
 
-        if (previous && updatedKey) {
+        // @todo: causes bug sometimes!
+        if (false && previous && updatedKey) {
 
           const updatedItem = this._spinoff(this._class().item(), { 
             path: this._pathToArray(args.path).concat([ updatedKey ]),
