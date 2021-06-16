@@ -2,48 +2,33 @@ import { createMixableClass } from '@blast-engine/mixable'
 import { kv, m, kvr, k } from '@blast-engine/utils'
 import { Full } from '../base'
 import { SelectionRef } from './selection-ref.class'
-import { SelectionStruct } from './selection-struct.class'
+
 
 export const Selection = createMixableClass({
   name: `Selection`,
-  inherits: [ Full, SelectionStruct, SelectionRef ],
+  inherits: [ Full, SelectionRef ],
   body: class {
 
     _constructor(args = {}) {
-      this._onModelConstructed(() => {
-        const { updatedKey, previous } = args.context || {}
 
-        // @todo: causes bug sometimes!
-        if (false && previous && updatedKey) {
-
-          const updatedItem = this._spinoff(this._class().item(), { 
-            path: this._pathToArray(args.path).concat([ updatedKey ]),
-            data: args.data[updatedKey]
+      this.keys = args.keys
+      this.items = kv(args.data)
+        .reduce((items, { k, v:data }) => {
+          items[k] = this._spinoff(this._class().item(), { 
+            keys: this.keys, 
+            data
           })
+          return items
+        }, {})
 
-          this.itemsKV = k(args.data)
-            .filter(k => this.keys.includes(k))
-            .map(k => {
-              if (k !== updatedKey) return { k, v: previous.items[k] }
-              return { k, v: updatedItem }
-            })
-
-        } else {     
-
-          this.itemsKV = kv(args.data)
-            .filter(({ k }) => this.keys.includes(k))
-            .map(({ k, v:data }) => ({
-              k,
-              v: this._spinoff(this._class().item(), { 
-                path: this._pathToArray(args.path).concat([ k ]),
-                data
-              })
-            }))
-
-        }
-
-        this.items = kvr(this.itemsKV)
-       
+      this.data = args.data
+    }
+    
+    isLoaded() {
+      if (typeof this.data === undefined) return false
+      return this.keys.every(k => {
+        const item = this.items[k]
+        return item && this.items[k].isLoaded()
       })
     }
 

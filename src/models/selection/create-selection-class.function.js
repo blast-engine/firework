@@ -40,7 +40,7 @@ export function createSelectionClass({
 
   const SelectionClassFull = createMixableClass({
     name: name,
-    inherits: [ SelectionClassStruct, SelectionClassRef, Selection ],
+    inherits: [ SelectionClassRef, Selection ],
     staticProps: { 
       ref: () => SelectionClassRef, 
       struct: () => SelectionClassStruct,
