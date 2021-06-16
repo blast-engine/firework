@@ -1,6 +1,6 @@
 {
   "name": "@blast-engine/firework",
-  "version": "2.0.43",
+  "version": "2.0.44",
   "main": "dist/firework.js",
   "scripts": {
     "scratchpad": "node --inspect ./scripts/scratchpad.script.js",
