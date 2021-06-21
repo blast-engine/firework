@@ -10,18 +10,39 @@ export const Selection = createMixableClass({
   body: class {
 
     _constructor(args = {}) {
-
-      this.keys = args.keys
-      this.items = kv(args.data)
-        .reduce((items, { k, v:data }) => {
-          items[k] = this._spinoff(this._class().item(), { 
-            keys: this.keys, 
-            data
-          })
-          return items
-        }, {})
-
       this.data = args.data
+      this.keys = args.keys
+      // const { updatedKey, previous } = args.context || {}
+
+      // if (previous && updatedKey) {
+        
+      //   const updatedItem = this._spinoff(this._class().item(), { 
+      //     path: this._pathToArray(args.path).concat([ updatedKey ]),
+      //     data: args.data[updatedKey]
+      //   })
+
+      //   this.itemsKV = k(args.data)
+      //     .filter(k => this.keys.includes(k))
+      //     .map(k => {
+      //       if (k !== updatedKey) return { k, v: previous.items[k] }
+      //       return { k, v: updatedItem }
+      //     })
+
+        
+
+      // } else {     
+
+        this.items = kv(args.data)
+          .filter(k => this.keys.includes(k))
+          .reduce((items, { k, v:data }) => {
+            items[k] = this._spinoff(this._class().item(), { 
+              path: this._path(k),
+              data
+            })
+            return items
+          }, {})
+      // }
+     
     }
     
     isLoaded() {
