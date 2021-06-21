@@ -2,15 +2,17 @@
 # yarn lockfile v1
 
 
-"@blast-engine/mixable@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@blast-engine/mixable/-/mixable-0.0.3.tgz#2f800343cbf9b74c0de6a5697cf5f616fcb0ed20"
-  integrity sha512-cxV1ImAwCuABLnDyDOi0bXs+fQcgSGK7IKqHYb+ZngZU/5EqQNzhimWA7t/diJ6EyD5t8FGdBWmP1DhUO4vGRA==
+"@blast-engine/mixable@^2.0.0":
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/@blast-engine/mixable/-/mixable-2.0.11.tgz#ecc02d8c56e6627cd8c3852f6f157c6d7b6f5845"
+  integrity sha512-aMEB/ajUP+RuCiDAlqcbkALBdTnhXfmasAtC54Fi7NmXJu0Z1IMyt9lwyve4o3ikBxQyyWlD9N1R2uNyDPbYxg==
 
-"@blast-engine/utils@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@blast-engine/utils/-/utils-0.0.3.tgz#97faf481f94b9936435af4bb2eb9dc1c5f7b8100"
-  integrity sha512-8RpSmKg3U4AgeEw9Jf9zGDAHr2ciYda6WxMOL+tH3ittbM/T+G8ZGw4oaSyujlQ7Mio3obkZp+tOqimxizDDvw==
+"@blast-engine/utils@^2.0.0":
+  version "2.1.43"
+  resolved "https://registry.yarnpkg.com/@blast-engine/utils/-/utils-2.1.43.tgz#ea9053e56d6a0661ed82a0f88074123c2e55fc41"
+  integrity sha512-FCwAvzDEmSpkrIrfqetL+9p4joPebiXkT7fRphkLEWLxkcdiNRuzBL8iznfjNOoLpsFx/UR5KaOZD97JL8YIJA==
+  dependencies:
+    safe-access "^0.1.0"
 
 "@sinonjs/commons@^1", "@sinonjs/commons@^1.3.0", "@sinonjs/commons@^1.4.0":
   version "1.6.0"
@@ -3405,9 +3407,9 @@ locate-path@^3.0.0:
     path-exists "^3.0.0"
 
 lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 lolex@^4.1.0, lolex@^4.2.0:
   version "4.2.0"
