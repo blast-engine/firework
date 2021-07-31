@@ -30,7 +30,7 @@ export const createFireworkService =
       } 
     })
 
-    const fwService = new Kernel({
+    const fw = new Kernel({
       createWatcher: createCreateWatcher({ getFbRef: fbAdapter.getRef }),
       snapQuery,
       onAuthStateChanged: fbAdapter.onAuthStateChanged,
@@ -40,8 +40,12 @@ export const createFireworkService =
     })
 
     if (withReactBindings)
-      fwService.connect = createFireworkConnect({ fwService })
+      fw.connect = createFireworkConnect({ fwService })
 
-    return fwService
+    fw.getData = async path => (await fbDb().ref(path).once('value')).val()
+    fw.setData = async (path, value) => (await fbDb().ref(path).set(value))
+    fw.newKey = () => fbDb().ref('__').push().key
+
+    return fw
 
   }
