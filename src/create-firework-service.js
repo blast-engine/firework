@@ -40,7 +40,7 @@ export const createFireworkService =
     })
 
     if (withReactBindings)
-      fw.connect = createFireworkConnect({ fwService })
+      fw.connect = createFireworkConnect({ fwService: fw })
 
     fw.getData = async path => (await fbDb().ref(path).once('value')).val()
     fw.setData = async (path, value) => (await fbDb().ref(path).set(value))
