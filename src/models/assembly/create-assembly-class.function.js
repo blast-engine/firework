@@ -13,6 +13,8 @@ const methodNamesToIgnoreInStarPort = [
   ...assemblyMethodNames 
 ] 
 
+const isPrivateMethod = methodName => methodName[0] === '_'
+
 export function createAssemblyClass({
   name,
   memberModels = {}, 
@@ -46,6 +48,7 @@ export function createAssemblyClass({
       const Member = memberModels[memberName]
       Object.getOwnPropertyNames(Member.prototype).forEach(memberMethodName => {
         if (methodNamesToIgnoreInStarPort.includes(memberMethodName)) return 
+        if (isPrivateMethod(memberMethodName)) return
         const override = mpWithoutStar.find(mp => mp.method === memberMethodName)
         if (!override) mpWithoutStar.push({ method: memberMethodName, rename: memberMethodName})
       })
