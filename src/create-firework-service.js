@@ -21,7 +21,7 @@ export const createFireworkService =
 
     const fbAdapter = mock 
       ? createMockFirebaseAdapter()
-      : createFirebaseAdapter({ firebase })
+      : createFirebaseAdapter({ firebase, adminMode })
 
     const root = instantiateRootModel({ 
       fbService: {
@@ -36,6 +36,7 @@ export const createFireworkService =
       onAuthStateChanged: fbAdapter.onAuthStateChanged,
       fbService: fbAdapter,
       root,
+      adminMode,
       autoAnon
     })
 

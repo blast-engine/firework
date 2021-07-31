@@ -51,16 +51,11 @@ export class Kernel {
       return this.args.fbService.signup({ ...args, anonId: this.auth().id() })
     }
 
-    this.args.onAuthStateChanged(authState => this._handleAuthChange(authState))
-    this.args.fbService.shouldRefreshAuth.subscribe(authState => this._handleAuthChange(authState))
-  
-    // // @todo: FIX THIS RACE CONDITION
-    // // @todo: this should be a kernel provision like 'auth'
-    // this.args.fbService.fetchTimeDelta()
-    //   .then(timeDelta => {
-    //     this.state.timeDelta = timeDelta
-    //     this.state.now = () => Date.now() + timeDelta
-    //   })
+    if (!this.args.adminMode) {
+      this.args.onAuthStateChanged(authState => this._handleAuthChange(authState))
+      this.args.fbService.shouldRefreshAuth.subscribe(authState => this._handleAuthChange(authState))
+    }
+
   }
 
   // --- debug methods: start

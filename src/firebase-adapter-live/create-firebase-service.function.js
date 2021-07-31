@@ -18,10 +18,9 @@ export const createFirebaseAdapter = ({ firebase, adminMode }) => {
   //   signup using credential link doesnt 
   //   refresh auth state, but updates auth().currentUser
 
-  const shouldRefreshAuth = new Emitter()
-
-  const fbSignup = createSignup(firebase)
-  const signup = (...args) => fbSignup(...args)
+  const shouldRefreshAuth = adminMode? noop : new Emitter()
+  const fbSignup = adminMode? noop : createSignup(firebase)
+  const signup = adminMode? noop : (...args) => fbSignup(...args)
     .then((user) => {
       if (user && user.user) user = user.user;
       shouldRefreshAuth.emit(user)
