@@ -26,7 +26,9 @@ export const createFetcher =
         : args.keepOldResultUntilNew,
     ...deriveInstructions(args),
     args, opts,
+    isFetcher: true,
     equals: other => {
+      if (!other) return false
       if (opts.equals) return opts.equals(other)
       if (other.name !== opts.name) return false
       const argK = keys(args)

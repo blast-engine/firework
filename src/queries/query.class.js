@@ -32,6 +32,7 @@ export const Query = createMixableClass({
       return (
         query
         && typeof query === 'object'
+        && query.isQuery
         && this.type() === query.type()
       )
     }

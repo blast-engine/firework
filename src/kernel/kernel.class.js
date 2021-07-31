@@ -63,6 +63,27 @@ export class Kernel {
     //   })
   }
 
+  // --- debug methods: start
+
+  myUserId = () => {
+    const auth = this.auth()
+    if (!auth) return null
+    return auth.id()
+  }
+
+  getData = async path => {
+    const snapshot = await this.firebase.database().ref(path).once('value')
+    return snapshot.val()
+  }
+
+  setData = async (path, value) => {
+    return await this.firebase.database().ref(path).set(value)
+  }
+
+  newKey = () => fbDb().ref('__').push().key
+
+  /// --- debug methods: end
+
   timeDelta() {
     return this.state.timeDelta
   }
@@ -289,7 +310,7 @@ export class Kernel {
         return 
       }
     
-      // compute query
+      // compute query/fetcher
       const query = step.query({
         ...stepDepResults.map,
         rootRef: this.root,
@@ -387,6 +408,38 @@ export class Kernel {
     return promise
   }
 
+  _createWatcher({ 
+    query, 
+    prevWatcher,
+    onResultUpdated
+  }) {
+    if (!query.isFetcher) 
+      return this.args.createWatcher({ 
+        query, 
+        prevWatcher,
+        onResultUpdated
+      })
+
+    const fetcherWatcher = {
+      isFetcherWatcher: true,
+      result: undefined,
+      onResultUpdated
+    }
+
+    const subRequest = this.createRequest(query)
+    fetcherWatcher.result = subRequest.result
+
+    subRequest.emitter.subscribe(result => {
+      fetcherWatcher.result = result
+      fetcherWatcher.onResultUpdated()
+    })
+
+    fetcherWatcher.start = () => null
+    fetcherWatcher.kill = () => this.destroyRequest(subRequest.id)
+
+    return fetcherWatcher
+  }
+
   _resetWatcher(request, stepName, query) {
     const prevWatcher = request.watchers[stepName]
 
@@ -402,7 +455,7 @@ export class Kernel {
     } else {
 
       let watcher
-      watcher = this.args.createWatcher({ 
+      watcher = this._createWatcher({ 
         query, 
         prevWatcher,
         onResultUpdated: () => {

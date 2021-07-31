@@ -1,3 +1,4 @@
+import * as u from '@blast-engine/utils'
 import { createMixableClass } from '@blast-engine/mixable'
 import { NodeRef } from './node-ref.class'
 import { NodeStruct } from './node-struct.class'
@@ -10,10 +11,39 @@ import { Node } from './node-full.class'
 export const createNodeClass = ({
   name = '',
   inherits = [],
+  simpleAccess = [],
   ref = class {},
   struct = class {},
   full = class {}
 }) => {
+
+  const capitalizeFirstLetter = str => str.charAt(0).toUpperCase() + str.slice(1)
+
+  simpleAccess.forEach(config => {
+    let path = 'DELETE_ME'
+    let names = []
+
+    if (u.isStr(config)) {
+      path = config
+      names = [ config ]
+    } else {
+      path = config.path
+      if (u.isStr(config.name)) names = [ config.name ]
+      else if (u.isArr(config.names)) names = config.names
+    }
+
+    const getter = function() { return this.get(path) }
+    const setter = function(value) { return this.set(path, value) }
+
+    names.forEach(name => {
+      const getterName = name
+      const setterName = `set${capitalizeFirstLetter(name)}`
+
+      ref.prototype[setterName] = setter
+      full.prototype[getterName] = getter
+      full.prototype[setterName] = setter
+    })
+  })
 
   const NodeClassRef = createMixableClass({
     name: `${name}_ref`,
