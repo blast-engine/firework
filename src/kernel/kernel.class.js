@@ -66,6 +66,12 @@ export class Kernel {
     return auth.id()
   }
 
+  authData = () => {
+    const auth = this.auth()
+    if (!auth) return null
+    return auth.data
+  }
+
   getData = async path => {
     const snapshot = await this.firebase.database().ref(path).once('value')
     return snapshot.val()
