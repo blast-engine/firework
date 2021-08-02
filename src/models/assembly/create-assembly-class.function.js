@@ -60,7 +60,7 @@ export function createAssemblyClass({
   objForEach(portMethods, (methodPorts, memberName) => {
     methodPorts.forEach(({ method, rename }) => {
       const Member = memberModels[memberName]
-      if (Member.prototype[method]) 
+      if (Member.prototype[method] && !body.prototype[rename]) 
         body.prototype[rename] = function(...args) {
           if (!this.members[memberName]) 
             throw new Error(`${memberName} not given for ${name}`)
