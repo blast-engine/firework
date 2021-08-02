@@ -187,10 +187,11 @@ export class Kernel {
       let step = instructions.steps[i]
       let query = step.query(data)
       if (query === null) data[step.name] = null
-      else data[step.name] = await this.args.snapQuery({ 
+      if (!query.isFetcher) data[step.name] = await this.args.snapQuery({ 
         query, 
         getFbRef: this.args.fbService.getRef 
       })
+      else data[step.name] = await this.snap(query)
     }
 
     return instructions.final.instantiate({ 

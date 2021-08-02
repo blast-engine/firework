@@ -33,14 +33,25 @@ export const Selection = createMixableClass({
       // } else {     
 
         this.items = kv(args.data)
-          .filter(k => this.keys.includes(k))
+          .filter(({ k }) => this.keys.includes(k))
           .reduce((items, { k, v:data }) => {
             items[k] = this._spinoff(this._class().item(), { 
               path: this._path(k),
               data
             })
             return items
-          }, {})
+          }, {})        
+          
+        this.itemsKV = kv(args.data)
+          .filter(({ k }) => this.keys.includes(k))
+          .map(({ k, v:data }) => ({ 
+            k, 
+            v: this._spinoff(this._class().item(), { 
+              path: this._path(k),
+              data
+            })
+          }))
+
       // }
      
     }

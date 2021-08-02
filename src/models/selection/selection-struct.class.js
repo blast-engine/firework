@@ -15,14 +15,14 @@ export const SelectionStruct = createMixableClass({
       ))
 
       this.keys = args.keys
-      this.itemStructs = kv(args.data)
-        .reduce((itemStructs, { k, v:data }) => {
-          itemStructs[k] = this._spinoff(this._class().itemStruct(), { 
-            keys: this.keys, 
-            data
-          })
-          return itemStructs
-        }, {})
+      // this.itemStructs = kv(args.data)
+      //   .reduce((itemStructs, { k, v:data }) => {
+      //     itemStructs[k] = this._spinoff(this._class().itemStruct(), { 
+      //       keys: this.keys, 
+      //       data
+      //     })
+      //     return itemStructs
+      //   }, {})
 
       this.data = args.data
     }
