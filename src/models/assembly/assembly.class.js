@@ -1,6 +1,7 @@
-import { k } from '@blast-engine/utils'
+import * as u from '@blast-engine/utils'
 import { createMixableClass, isMixableClass, isMixableInstance } from '@blast-engine/mixable'
 import { Struct } from '../base'
+import { ensure } from '../../ensure.function'
 
 export const Assembly = createMixableClass({
   name: 'Assembly',
@@ -9,21 +10,52 @@ export const Assembly = createMixableClass({
 
     _constructor(args = {}) {
       this.members = args.members || args.memberInstances
-      this._ensure('members are given matching instances',
-        () => {
-          const memberClasses = this._class().members()
-          const detachableMembers = this._class().detachableMembers()
-          const memberInstances = this.members
 
-          if (!memberInstances || !memberInstances === 'object') return false
+      const checkMembers = () => {
+        const assemblyName = this._class().name
+        const memberClasses = this._class().members()
+        const detachableMembers = this._class().detachableMembers()
+        const memberInstances = this.members
 
-          return k(memberClasses).every(name => {
+        if (!memberInstances || !memberInstances === 'object') return false
+
+        return u.k(memberClasses).every(name => {
+          let isCorrectInstance
+          let error
+
+          try {
+
             const i = memberInstances[name]
             if (detachableMembers.includes(name) && i === null) return true
-            return isMixableInstance(i) && i.is(memberClasses[name])
-          })
-        }
-      )
+            isCorrectInstance = i && isMixableInstance(i) && i.is(memberClasses[name])
+
+          } catch (e) { error = e }
+
+          if (!isCorrectInstance) {
+            const i = memberInstances[name]
+
+            let givenType
+            if (i === undefined) givenType = 'undefined'
+            else if (i === null) givenType = 'null'
+            else givenType = i._class().name
+  
+            console.error('members are given matching instances.', {
+              assembly: assemblyName,
+              memberName: name,
+              memberClass: memberClasses[name],
+              givenType,
+              error,
+              memberClasses,
+              memberInstances
+            })
+
+          }
+
+          return isCorrectInstance
+        })
+      }
+
+      checkMembers()
     }
 
     members() {
@@ -40,7 +72,7 @@ export const Assembly = createMixableClass({
     }
 
     isLoaded() {
-      return k(this.members)
+      return u.k(this.members)
         .every(name => {
           const detachableMembers = this._class().detachableMembers()
           
