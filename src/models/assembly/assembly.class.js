@@ -83,7 +83,7 @@ export const Assembly = createMixableClass({
             detachableMembers.includes(name) && 
             this.members[name] === null
           ) return true
-            
+          
           if (this.members[name].is(Struct)) {
             return this.members[name].isLoaded()
           } else return true
