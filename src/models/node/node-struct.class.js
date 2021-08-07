@@ -1,7 +1,7 @@
 import access from 'safe-access'
 
 import { createMixableClass } from '@blast-engine/mixable'
-import { shallowClone } from '@blast-engine/utils'
+import { shallowClone, g } from '@blast-engine/utils'
 import { Struct } from '../base'
 import { flagSymbol } from '../flag-symbol.function'
 
@@ -57,7 +57,7 @@ export const NodeStruct = createMixableClass({
 
       if (!path) return data
 
-      const val = access(
+      const val = g(
         data || {},
         Array.isArray(path) ? path.join('.') : path )
 

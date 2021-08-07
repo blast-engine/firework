@@ -11,51 +11,60 @@ export const Assembly = createMixableClass({
     _constructor(args = {}) {
       this.members = args.members || args.memberInstances
 
-      const checkMembers = () => {
-        const assemblyName = this._class().name
-        const memberClasses = this._class().members()
-        const detachableMembers = this._class().detachableMembers()
-        const memberInstances = this.members
+      this._checkMembers()
+      this._portMembers()
+    }
 
-        if (!memberInstances || !memberInstances === 'object') return false
+    _portMembers() {
+      u.k(this.members).forEach(name => {
+        if (!this[name]) this[name] = function() {
+          return this.members[name]
+        }
+      })
+    }
 
-        return u.k(memberClasses).every(name => {
-          let isCorrectInstance
-          let error
+    _checkMembers() {
+      const assemblyName = this._class().name
+      const memberClasses = this._class().members()
+      const detachableMembers = this._class().detachableMembers()
+      const memberInstances = this.members
 
-          try {
+      if (!memberInstances || !memberInstances === 'object') return false
 
-            const i = memberInstances[name]
-            if (detachableMembers.includes(name) && i === null) return true
-            isCorrectInstance = i && isMixableInstance(i) && i.is(memberClasses[name])
+      return u.k(memberClasses).every(name => {
+        let isCorrectInstance
+        let error
 
-          } catch (e) { error = e }
+        try {
 
-          if (!isCorrectInstance) {
-            const i = memberInstances[name]
+          const i = memberInstances[name]
+          if (detachableMembers.includes(name) && i === null) return true
+          isCorrectInstance = i && isMixableInstance(i) && i.is(memberClasses[name])
 
-            let givenType
-            if (i === undefined) givenType = 'undefined'
-            else if (i === null) givenType = 'null'
-            else givenType = i._class().name
-  
-            console.error('members are given matching instances.', {
-              assembly: assemblyName,
-              memberName: name,
-              memberClass: memberClasses[name],
-              givenType,
-              error,
-              memberClasses,
-              memberInstances
-            })
+        } catch (e) { error = e }
 
-          }
+        if (!isCorrectInstance) {
+          const i = memberInstances[name]
 
-          return isCorrectInstance
-        })
-      }
+          let givenType
+          if (i === undefined) givenType = 'undefined'
+          else if (i === null) givenType = 'null'
+          else givenType = i._class().name
 
-      checkMembers()
+          console.error('members are given matching instances.', {
+            assembly: assemblyName,
+            memberName: name,
+            memberClass: memberClasses[name],
+            givenType,
+            error,
+            memberClasses,
+            memberInstances
+          })
+
+        }
+
+        return isCorrectInstance
+      })
     }
 
     members() {
