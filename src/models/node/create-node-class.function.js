@@ -1,7 +1,6 @@
 import * as u from '@blast-engine/utils'
 import { createMixableClass } from '@blast-engine/mixable'
 import { NodeRef } from './node-ref.class'
-import { NodeStruct } from './node-struct.class'
 import { Node } from './node-full.class'
 
 // @todo: get rid of node-ref.class.js and other files like that, leave only this funciton
@@ -13,7 +12,6 @@ export const createNodeClass = ({
   inherits = [],
   simpleAccess = [],
   ref = class {},
-  struct = class {},
   full = class {}
 }) => {
 
@@ -52,21 +50,13 @@ export const createNodeClass = ({
     body: ref
   })
 
-  const NodeClassStruct = createMixableClass({
-    name: `${name}_struct`,
-    inherits: inherits.map(Model => Model.struct()).concat([ NodeStruct ]),
-    staticProps: { full: () => NodeClassFull },
-    body: struct
-  })
-
   const NodeClassFull = createMixableClass({
-    name: name,
+    name: `${name}_full`,
     // @todo: if we put Node last here, then overridden isLoaded gets brought back to original
-    inherits: inherits.concat([ Node, NodeClassRef, NodeClassStruct ]),
+    inherits: inherits.concat([ Node, NodeClassRef ]),
     staticProps: { 
       full: () => NodeClassFull, 
-      ref: () => NodeClassRef, 
-      struct: () => NodeClassStruct 
+      ref: () => NodeClassRef
     },
     body: full
   })

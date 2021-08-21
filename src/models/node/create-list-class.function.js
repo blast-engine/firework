@@ -1,20 +1,18 @@
 import { createMixableClass, isMixableClass } from '@blast-engine/mixable'
 import { ensure } from '../../ensure.function'
-import { Ref, Struct } from '../base'
+import { Node } from '../node'
 import { ListRef } from './list-ref.class'
-import { ListStruct } from './list-struct.class'
-import { List } from './list.class'
+import { List } from './list-full.class'
 
 export function createListClass({
   name,
-  itemModel,
+  ItemModel,
   ref,
-  struct,
   full
 }) {
   ensure(
     'itemModel is a full model', 
-    () => isMixableClass(itemModel) && itemModel.inheritsFrom(Struct, Ref), 
+    () => isMixableClass(ItemModel) && ItemModel.inheritsFrom(Node), 
     'createSelectionClass()'
   )
 
@@ -23,29 +21,18 @@ export function createListClass({
     inherits: [ ListRef ],
     staticProps: { 
       full: () => ListClassFull,
-      itemRef: () => itemModel.ref()
+      itemRef: () => ItemModel.ref()
     },
     body: ref
-  })
-  
-  const ListClassStruct = createMixableClass({
-    name: `${name}_struct`,
-    inherits: [ ListStruct ],
-    staticProps: { 
-      full: () => ListClassFull,
-      itemStruct: () => itemModel.struct()
-    },
-    body: struct
   })
 
   const ListClassFull = createMixableClass({
     name: name,
-    inherits: [ ListClassStruct, ListClassRef, List ],
+    inherits: [ ListClassRef, List ],
     staticProps: { 
       ref: () => ListClassRef, 
-      struct: () => ListClassStruct,
       full: () => ListClassFull,
-      item: () => itemModel
+      item: () => ItemModel
     },
     body: full
   })

@@ -69,7 +69,7 @@ describe('Kernel', () => {
       name: 'Step1Model',
       struct: class {
         prop() {
-          return this._data('prop')
+          return this.data('prop')
         }
       }
     })
@@ -82,7 +82,7 @@ describe('Kernel', () => {
       name: 'Step3Model',
       struct: class {
         prop() {
-          return this._data('prop')
+          return this.data('prop')
         }
       }
     })
@@ -523,8 +523,8 @@ describe('Kernel', () => {
     assert([ 
       currentResult !== undefined,
       currentResult.is(ResultModel),
-      currentResult.members.firstStep === activeWatchers[0].result,
-      currentResult.members.secondStep === activeWatchers[1].result,
+      currentResult._members.firstStep === activeWatchers[0].result,
+      currentResult._members.secondStep === activeWatchers[1].result,
       authEmissionCount === 0,
       resultEmissionCount === 1,
       activeWatchers.length === 4,

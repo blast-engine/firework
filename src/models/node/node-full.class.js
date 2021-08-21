@@ -1,19 +1,44 @@
+import * as u from '@blast-engine/utils'
 import { createMixableClass } from '@blast-engine/mixable'
-import { Full } from '../base'
+import { LoadableModel } from '../base'
 import { NodeRef } from './node-ref.class'
-import { NodeStruct } from './node-struct.class'
 
 export const Node = createMixableClass({
-  name: 'Node',
-  inherits: [ Full, NodeStruct, NodeRef ],
+  name: 'Node_full',
+  inherits: [ LoadableModel, NodeRef ],
   body: class {
 
-    initIfEmpty() {
-      // empty object is an empty update
-      return this.isEmpty() ? this.initialize() : {}
+    _constructor({ data, query } = {}){
+      this._ensure(
+        'NodeStruct is given `data` in constructor', 
+        () => data !== undefined
+      )
+      this._data = data
+      this._query = query
     }
 
-    get(path) { return this._data(path) }
+    isLoaded() { return this._data !== undefined }
+
+    isEmpty() {
+      this._ensureLoaded()
+      return this._data === null
+    }
+
+    get(path) { return this.data(path) }
+
+    data(path) {
+      if (!path) return this._data
+
+      const val = u.get(
+        this._data || {},
+        this.pathToString(path)
+      )
+
+      if (val === undefined) {
+        if (this.isLoaded()) return null
+        else return undefined
+      } else return val
+    }
     
   }
 })

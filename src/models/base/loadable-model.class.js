@@ -1,11 +1,14 @@
 import { createMixableClass } from '@blast-engine/mixable'
 import { Model } from './model.class'
 
-export const Struct = createMixableClass({
-  name: 'Struct',
+export const LoadableModel = createMixableClass({
+  name: 'LoadableModel',
   inherits: [ Model ],
   body: class {
 
+    /**
+     * @abstract
+     */
     isLoaded() {
       this._abstract('isLoaded')
     }
@@ -16,6 +19,6 @@ export const Struct = createMixableClass({
     _ensureLoaded() {
       this._ensure(`data is loaded`, () => this.isLoaded())
     }
-  
+
   }
 })

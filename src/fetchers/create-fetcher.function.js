@@ -44,16 +44,16 @@ export const createFetcher =
 
 export const instructionsFromQuery = query =>
   createFetcher({
-    name: 'fetch-query',
+    name: 'fetch-anon-query',
     equals: other => query.equals(other.opts.query),
     query
   }, () => ({
     steps: [{
-      name: 'queryNode',
-      query: ({ root }) => query
+      name: 'model',
+      query: () => query
     }],
     final: {
-      take: [ 'queryNode' ],
-      instantiate: ({ queryNode }) => queryNode
+      take: [ 'model' ],
+      instantiate: ({ model }) => model
     }
   }))()

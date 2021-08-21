@@ -1,102 +1,87 @@
+import * as u from '@blast-engine/utils'
 import { createMixableClass } from '@blast-engine/mixable'
-import { Ref } from '../base'
-import { merge, objMap } from '@blast-engine/utils'
-import { flagSymbol } from '../flag-symbol.function'
 import { FullNodeQuery } from '../../queries'
+import { Model } from '../base'
 
 export const NodeRef = createMixableClass({
   name: 'NodeRef',
-  inherits: [ Ref ],
+  inherits: [ Model ],
   body: class {
 
-    _constructor(params = {}) {
-      this._ensure('NodeRef is given `path` in constructor', () => !!params.path)
-      this.path = params.path
+    _constructor({ path, state } = {}) {
+      this._ensure('NodeRef is given `path` in constructor', () => !!path)
+      this._path = this.pathToArray(path)
+      this._state = state || {}
     }
 
-    // @deprecated
-    fill(data) {
-      const FullModel = this._class().full()
-      return this._spinoff(FullModel, { path: this._path(), data })
+    update(updateMap) {
+      return { [this.strPath()]: updateMap }
     }
 
-    set(path, value) { return this._update({ [path]: value }) }
+    set(data) {
+      return { [this.strPath()]: data }
+    }
+
+    delete() {
+      return this.set(null)
+    }
+
+    pathToArray(path) {
+      if (!path) return []
+      if (u.isArray(path)) return path
+      else if (u.isString(path)) return path.split('/')
+      throw new Error(`${path} is neither a string nor an array`)
+    }
+   
+    pathToString(path) {
+      if (!path) return ''
+      if (u.isArray(path)) return path.join('/')
+      else if (u.isString(path)) return path 
+      throw new Error(`${unknown} is neither a string nor an array`)
+    }
     
-    /**
-     * @override
-     */
-    initialize(initData) {
-      const cleanInitData = objMap(initData, v => v === undefined ? null : v)
-      return this._update(cleanInitData)
+    strPath(subPath) {
+      return this.pathToString(this.path(subPath))
     }
 
-    /**
-     * @override
-     * @returns Query
-     */
-    query() {
-      return this._spinoff(FullNodeQuery, {
-        path: this._strPath(),
-        instantiate: (data) => this._spinoff(this._class().full(), { 
-          path: this._path(), 
-          data 
+    path(subPath) {
+      return this._path.concat(this.pathToArray(subPath))
+    }
+
+    transaction(deriveUpdate) {
+      const instantiateFull = data =>
+        this.spinoff(this.class().full(), {
+          path: this._path,
+          state: this._state,
+          data
         })
-      })
-    }
-    
-    _strPath(subPath /* undefined | string (shallow path) | Array<string> */ ) {
-      return this._pathToString(this._path(subPath))
-    }
-
-    _path(subPath /* undefined | string (shallow path) | Array<string> (path array)*/ ) {
-      return this._pathToArray(this.path).concat(this._pathToArray(subPath))
-    }
-
-    /**
-     * @return Update
-     */
-    _update(updateData /* serializable obj without arrays or undefined */) {
-      return { [this._strPath()]: this._prepareUpdateData(updateData) }
-    }
-
-    /**
-     * @return Transaction
-     */
-    _transaction(deriveUpdate /* data => null | undefined | serializable object with no arrays or undefined */) {
-      const cloneWithData = data => 
-        this._spinoff(this._class(), merge(this, { data }))
+      
       return {
-        path: this._strPath(),
+        path: this.strPath(),
         run: data => { 
-          const update = deriveUpdate(cloneWithData(data))
-          if (!update) return update
-          return this._prepareUpdateData(merge(data, update))
+          const relativeUpdate = deriveUpdate(instantiateFull(data))
+          if (!relativeUpdate) return relativeUpdate
+          return u.merge(data, relativeUpdate)
         },
         instantiateResult: data => {
-          return cloneWithData(data)
+          return instantiateFull(data)
         }
       }
     }
 
     /**
-     * @return Update
+     * @override
      */
-    delete() {
-      return this._delete()
-    }
-
-    _delete() {
-      return { [this._strPath()]: null }
-    }
-
-    /**
-     * @return Obj (prepared update data)
-     * @overridable
-     *    if you override this one, you should also override WithData._waitingForParts()
-     */
-    _prepareUpdateData(updateData /* serializable obj */ ) {
-      return updateData 
-      // return merge(updateData, { [flagSymbol()]: true }) // @DEPRECATED
+    query() {
+      const query = new FullNodeQuery({
+        path: this.strPath(),
+        instantiate: (data) => this.spinoff(this.class().full(), { 
+          path: this._path, 
+          data,
+          query
+        })
+      })
+      return query
     }
 
   }

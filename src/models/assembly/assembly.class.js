@@ -1,33 +1,32 @@
 import * as u from '@blast-engine/utils'
 import { createMixableClass, isMixableClass, isMixableInstance } from '@blast-engine/mixable'
-import { Struct } from '../base'
+import { LoadableModel, isLoadableModel } from '../base'
 import { ensure } from '../../ensure.function'
 
 export const Assembly = createMixableClass({
   name: 'Assembly',
-  inherits: [ Struct ],
+  inherits: [ LoadableModel ],
   body: class {
 
     _constructor(args = {}) {
-      this.members = args.members || args.memberInstances
-
+      this._members = args.members || args.memberInstances
       this._checkMembers()
       this._portMembers()
     }
 
     _portMembers() {
-      u.k(this.members).forEach(name => {
+      u.k(this._members).forEach(name => {
         if (!this[name]) this[name] = function() {
-          return this.members[name]
+          return this._members[name]
         }
       })
     }
 
     _checkMembers() {
-      const assemblyName = this._class().name
-      const memberClasses = this._class().members()
-      const detachableMembers = this._class().detachableMembers()
-      const memberInstances = this.members
+      const assemblyName = this.class().name
+      const memberClasses = this.class().members()
+      const detachableMembers = this.class().detachableMembers()
+      const memberInstances = this._members
 
       if (!memberInstances || !memberInstances === 'object') return false
 
@@ -68,33 +67,33 @@ export const Assembly = createMixableClass({
     }
 
     members() {
-      return this.members
+      return this._members
     }
 
     has(memberName) {
       this._ensure(
         'has() is given name of detachable member', 
-        () => this._class().detachableMembers().includes(memberName)
+        () => this.class().detachableMembers().includes(memberName)
       )
 
-      return this.members[memberName] !== null
+      return this._members[memberName] !== null
     }
 
     isLoaded() {
-      return u.k(this.members)
+      return u.k(this._members)
         .every(name => {
-          const detachableMembers = this._class().detachableMembers()
+          const detachableMembers = this.class().detachableMembers()
           
-          if (this.members[name] === undefined) 
+          if (this._members[name] === undefined) 
             return false
 
           if (
             detachableMembers.includes(name) && 
-            this.members[name] === null
+            this._members[name] === null
           ) return true
           
-          if (this.members[name].is(Struct)) {
-            return this.members[name].isLoaded()
+          if (isLoadableModel(this._members[name])) {
+            return this._members[name].isLoaded()
           } else return true
         })
     }

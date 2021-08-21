@@ -1,23 +1,23 @@
 import { createMixableClass } from '@blast-engine/mixable'
-import { Struct } from './base'
+import { LoadableModel } from './base'
 
 export const AuthStruct = createMixableClass({
-  name: 'AuthStruct',
-  inherits: [ Struct ],
+  name: 'Auth_struct',
+  inherits: [ LoadableModel ],
   
   body: class {
 
-    _constructor(args = {}) {
-      this._ensure('auth data is never empty', () => args.data !== null)
-      this.data = args.data
+    _constructor({ data } = {}) {
+      this._ensure('auth data is never empty', () => data !== null)
+      this._data = data
     }
 
     isLoaded() {
-      return this.data !== undefined
+      return this._data !== undefined
     }
 
     userId() {
-      return this.data.userId
+      return this._data.userId
     }
 
     id() {
@@ -29,7 +29,7 @@ export const AuthStruct = createMixableClass({
     }
 
     isAnonymous() {
-      return this.data.isAnonymous
+      return this._data.isAnonymous
     }
 
     isAnon() {
@@ -37,11 +37,11 @@ export const AuthStruct = createMixableClass({
     }
 
     email() {
-      return this.data.email
+      return this._data.email
     }
 
     emailIsVerified() {
-      return this.data.emailVerified
+      return this._data.emailVerified
     }
 
   }

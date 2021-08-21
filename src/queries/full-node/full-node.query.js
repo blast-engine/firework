@@ -9,13 +9,13 @@ export const FullNodeQuery = createMixableClass({
     
     _constructor(args = {}) {
       ensure('FullNodeQuery is given a string path', () => typeof args.path === 'string')
-      this._path = args.path
       this._type = 'full-node'
+      this._path = args.path
     }
 
     equals(query) {
       return (
-        this._typeEquals(query)
+        this.typeEquals(query)
         && this.path() === query.path()
       )
     }

@@ -1,6 +1,6 @@
 import { createFullNodeWatcher } from './full-node'
 import { createOncePerChildWatcher } from './once-per-child'
-import { createArrayOfChildKeysWatcher } from './array-of-child-keys'
+import { createSelectionByKeysWatcher } from './selection-by-keys'
 
 export const createCreateWatcher = ({ getFbRef }) => ({ query, onResultUpdated, ...more }) => {
 
@@ -13,7 +13,7 @@ export const createCreateWatcher = ({ getFbRef }) => ({ query, onResultUpdated, 
       return createOncePerChildWatcher({ query, getFbRef, onResultUpdated, ...more })
 
     case 'array-of-child-keys':
-      return createArrayOfChildKeysWatcher({ query, getFbRef, onResultUpdated, ...more })
+      return createSelectionByKeysWatcher({ query, getFbRef, onResultUpdated, ...more })
 
     default:
       console.log('query.type is fucked.')

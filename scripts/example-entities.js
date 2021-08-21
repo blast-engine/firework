@@ -8,7 +8,7 @@ const ServerConfig = createNodeClass({
   full: class {
 
     cloudServerDisabled() {
-      return this._data('cloudServerDisabled')
+      return this.data('cloudServerDisabled')
     }
 
     setCloudServerDisabled(cloudServerDisabled) {
@@ -25,7 +25,7 @@ const RootRef = createMixableClass({
   body: class {
     
     serverConfigRef() {
-      return this._spinoff(ServerConfig.ref(), {
+      return this.spinoff(ServerConfig.ref(), {
         path: `serverConfig`
       })
     }

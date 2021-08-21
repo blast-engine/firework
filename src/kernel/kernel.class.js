@@ -1,6 +1,5 @@
 import { kv, keys, doAsync, values } from '@blast-engine/utils'
-import { AuthStruct } from '../models'
-import { isReady } from '../is-ready.function'
+import { AuthStruct, isReady } from '../models'
 import { instructionsFromQuery } from '../fetchers'
 
 export const SPECIAL_DEPENDENCIES = {
@@ -499,7 +498,7 @@ export class Kernel {
 
   async _handleAuthChange(auth) {
     if (auth) {
-      this.state.auth = this.root._spinoff(AuthStruct, {
+      this.state.auth = this.root.spinoff(AuthStruct, {
         data: {
           userId: auth.uid,
           email: auth.email,

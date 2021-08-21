@@ -1,17 +1,17 @@
 import { createMixableClass, isMixableClass } from '@blast-engine/mixable'
 import { objMap, keys, values, kv, objForEach } from '@blast-engine/utils'
 import { Assembly } from './assembly.class'
-import { Node } from '../node'
-import { List } from '../list'
+// import { Node } from '../node'
+// // import { List } from '../list'
 
-const nodeMethodNames = Object.getOwnPropertyNames(Node.prototype)
-const listMethodNames = Object.getOwnPropertyNames(List.prototype)
-const assemblyMethodNames = Object.getOwnPropertyNames(Assembly.prototype)
-const methodNamesToIgnoreInStarPort = [ 
-  ...nodeMethodNames, 
-  ...listMethodNames, 
-  ...assemblyMethodNames 
-] 
+// const nodeMethodNames = Object.getOwnPropertyNames(Node.prototype)
+// const listMethodNames = Object.getOwnPropertyNames(List.prototype)
+// const assemblyMethodNames = Object.getOwnPropertyNames(Assembly.prototype)
+// const methodNamesToIgnoreInStarPort = [ 
+//   ...nodeMethodNames, 
+//   ...listMethodNames, 
+//   ...assemblyMethodNames 
+// ] 
 
 const isPrivateMethod = methodName => methodName[0] === '_'
 
@@ -62,9 +62,9 @@ export function createAssemblyClass({
       const Member = memberModels[memberName]
       if (Member.prototype[method] && !body.prototype[rename]) 
         body.prototype[rename] = function(...args) {
-          if (!this.members[memberName]) 
+          if (!this._members[memberName]) 
             throw new Error(`${memberName} not given for ${name}`)
-          return this.members[memberName][method](...args)
+          return this._members[memberName][method](...args)
         }
     })
   })

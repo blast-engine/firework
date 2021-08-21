@@ -1,20 +1,18 @@
 import { createMixableClass, isMixableClass } from '@blast-engine/mixable'
 import { ensure } from '../../ensure.function'
-import { Struct, Ref } from '../base'
+import { Node } from '../node'
 import { SelectionRef } from './selection-ref.class'
-import { SelectionStruct } from './selection-struct.class'
-import { Selection } from './selection.class'
+import { Selection } from './selection-full.class'
 
 export function createSelectionClass({
   name,
-  itemModel,
+  ItemModel,
   ref, 
-  struct, 
   full
 }) {
   ensure(
-    'itemModel is a full model', 
-    () => isMixableClass(itemModel) && itemModel.inheritsFrom(Struct, Ref), 
+    'ItemModel is a full model', 
+    () => isMixableClass(ItemModel) && ItemModel.inheritsFrom(Node), 
     'createSelectionClass()'
   )
 
@@ -23,19 +21,9 @@ export function createSelectionClass({
     inherits: [ SelectionRef ],
     staticProps: { 
       full: () => SelectionClassFull,
-      itemRef: () => itemModel.ref()
+      itemRef: () => ItemModel.ref()
     },
     body: ref
-  })
-
-  const SelectionClassStruct = createMixableClass({
-    name: `${name}_struct`,
-    inherits: [ SelectionStruct ],
-    staticProps: { 
-      full: () => SelectionClassFull,
-      itemStruct: () => itemModel.struct()
-    },
-    body: struct
   })
 
   const SelectionClassFull = createMixableClass({
@@ -43,9 +31,8 @@ export function createSelectionClass({
     inherits: [ SelectionClassRef, Selection ],
     staticProps: { 
       ref: () => SelectionClassRef, 
-      struct: () => SelectionClassStruct,
       full: () => SelectionClassFull,
-      item: () => itemModel
+      item: () => ItemModel
     },
     body: full
   })

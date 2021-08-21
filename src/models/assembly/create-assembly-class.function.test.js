@@ -9,28 +9,28 @@ describe('AssemblyClass', () => {
     name: 'room',
     ref: class {
       initialize(args){
-        this.path = args.path
-        this.data = args.data || null
+        this._path= args.path
+        this._data = args.data || null
       }
       query() {
         return { 
           type: 'oncePerChile',
-          path: this.path,
-          model: this._class().full()
+          path: this.path(),
+          model: this.class().full()
         }
       }
     },
     struct: class {
       setData(data){
-        this.data = data
+        this._data = data
       }
     },
     full: class {
       getId(){
-        return this._data('id')
+        return this.data('id')
       }
       name(){
-        return this._data('topic')
+        return this.data('topic')
       }
     }
   })
@@ -39,29 +39,29 @@ describe('AssemblyClass', () => {
     name: 'user',
     ref: class {
       initialize(args){
-        this.path = args.path
-        this.data = args.data || null
+        this._path= args.path
+        this._data = args.data || null
       }
       query(){
         return {
           type: 'oncePerChild',
-          path: this.path,
-          model: this._class().full() // abstract this out
+          path: this.path(),
+          model: this.class().full() // abstract this out
         }
       }
 
     },
     struct: class {
       setData(data){
-        this.data = data
+        this._data = data
       }
       uname(){
-        return this._data('username')
+        return this.data('username')
       }
     },
     full: class {
       getId(){
-        return this._data('id')
+        return this.data('id')
       }
     }
   })

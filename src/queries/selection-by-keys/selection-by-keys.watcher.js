@@ -1,6 +1,6 @@
 import { doAsync, v } from '@blast-engine/utils'
 
-export const createArrayOfChildKeysWatcher = ({ query, getFbRef, prevWatcher, onResultUpdated }) => {
+export const createSelectionByKeysWatcher = ({ query, getFbRef, prevWatcher, onResultUpdated }) => {
 
   const watcher = {
     refListeners: {},
