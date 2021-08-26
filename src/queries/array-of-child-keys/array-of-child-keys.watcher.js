@@ -18,8 +18,6 @@ export const createArrayOfChildKeysWatcher = ({ query, getFbRef, prevWatcher, on
 
   if (buildUsingExisting) {
     watcher.data = prevWatcher.data
-    watcher.lastInstantiated = prevWatcher.lastInstantiated
-    watcher.result = prevWatcher.result
   }
 
   const createRefListener = ({ path }) => {
