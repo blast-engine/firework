@@ -1,7 +1,7 @@
 import React from 'react'
 import { kv, kvr, k, m, shallowClone, objMap } from '@blast-engine/utils'
 
-import { createFetcher } from '../fetchers'
+import { createFetcher, instructionsFromQuery } from '../fetchers'
 
 let compIdCounter = 0
 
@@ -29,13 +29,17 @@ export const createFireworkConnect = ({ fwService, config }) => (
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-      const instructionsMap = createInstructionsMap({ 
+      const instructionsMap = objMap(createInstructionsMap({
         props: nextProps, 
         root: fwService.root, 
         rootRef: fwService.root, 
         rr: fwService.root, 
         r: fwService.root 
+      }), i => {
+        if (i.isQuery) return instructionsFromQuery(i)
+        else return i
       })
+      
       const provisioningFactory = createProvisioningFactory(nextProps)
 
       const updatedInstructions = kv(instructionsMap)
