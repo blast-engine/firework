@@ -30,6 +30,7 @@ export const createFireworkConnect = ({ fwService, config }) => (
 
     static getDerivedStateFromProps(nextProps, prevState) {
       const instructionsMap = objMap(createInstructionsMap({
+        auth: fwService.auth(),
         props: nextProps, 
         root: fwService.root, 
         rootRef: fwService.root, 
