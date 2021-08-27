@@ -2,15 +2,17 @@
 # yarn lockfile v1
 
 
-"@blast-engine/mixable@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@blast-engine/mixable/-/mixable-0.0.3.tgz#2f800343cbf9b74c0de6a5697cf5f616fcb0ed20"
-  integrity sha512-cxV1ImAwCuABLnDyDOi0bXs+fQcgSGK7IKqHYb+ZngZU/5EqQNzhimWA7t/diJ6EyD5t8FGdBWmP1DhUO4vGRA==
+"@blast-engine/mixable@^2.0.0":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@blast-engine/mixable/-/mixable-2.0.1.tgz#547764f163ec3b297d37ed60cda883bd19a4af87"
+  integrity sha512-h0aN3OWNCbWdSztN5WfDhorZtE0lbtNevYeN31KqhHopu3ddhQ6kPyFx5pkvvzC2F3T5p1/CYiPryIlCChfTIQ==
 
-"@blast-engine/utils@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@blast-engine/utils/-/utils-0.0.3.tgz#97faf481f94b9936435af4bb2eb9dc1c5f7b8100"
-  integrity sha512-8RpSmKg3U4AgeEw9Jf9zGDAHr2ciYda6WxMOL+tH3ittbM/T+G8ZGw4oaSyujlQ7Mio3obkZp+tOqimxizDDvw==
+"@blast-engine/utils@^2.0.0":
+  version "2.1.18"
+  resolved "https://registry.yarnpkg.com/@blast-engine/utils/-/utils-2.1.18.tgz#55ebc49f34dc5c642752fa5d63fc09a03f6f636b"
+  integrity sha512-qXLgB1zi0fpd9cFnjqNAi7is7Vrnwoup4T06gOO8jcpLzVlDStruXH2Omnj1TudHcbM6tkHGVlYLw5jEeFs0sw==
+  dependencies:
+    safe-access "^0.1.0"
 
 "@sinonjs/commons@^1", "@sinonjs/commons@^1.3.0", "@sinonjs/commons@^1.4.0":
   version "1.6.0"
@@ -2623,9 +2625,9 @@ inherits@2.0.3:
   integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
 
 ini@^1.3.4, ini@^1.3.5, ini@~1.3.0:
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
-  integrity sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
+  version "1.3.8"
+  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.8.tgz#a29da425b48806f34767a4efce397269af28432c"
+  integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
 
 interpret@1.2.0:
   version "1.2.0"
