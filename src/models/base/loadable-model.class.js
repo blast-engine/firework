@@ -1,24 +1,24 @@
-import { createMixableClass } from '@blast-engine/mixable'
-import { Model } from './model.class'
+export const createLoadableModelClass = provisions => 
+  provisions.createMixableClass({
+    name: 'LoadableModel',
+    inherits: [ provisions.models.Model ],
+    provisions,
+    body: class {
 
-export const LoadableModel = createMixableClass({
-  name: 'LoadableModel',
-  inherits: [ Model ],
-  body: class {
+      _constructor({ cache } = {}) {   
+        this._cache = cache || {}
+      }
 
-    /**
-     * @abstract
-     */
-    isLoaded() {
-      this._abstract('isLoaded')
+      isLoaded() {
+        this.abstract()
+      }
+  
+      ensureLoaded() {
+        this._provisions.ensure({
+          check: () => this.isLoaded(),
+          failMsg: 'data is not loaded'
+        })
+      }
+  
     }
-
-    /**
-     * @throws
-     */
-    _ensureLoaded() {
-      this._ensure(`data is loaded`, () => this.isLoaded())
-    }
-
-  }
-})
+  })

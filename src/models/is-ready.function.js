@@ -1,8 +1,8 @@
 import { isLoadableModel } from './base'
 
-export const isReady = (...provisions) => provisions.every(p => {
-  if (p === undefined) return false
-  if (p === null) return true
-  if (isLoadableModel(p)) return p.isLoaded()
+export const isReady = (...models) => models.every(m => {
+  if (m === undefined) return false
+  if (m === null) return true
+  if (isLoadableModel(m)) return m.isLoaded()
   else return true
 })

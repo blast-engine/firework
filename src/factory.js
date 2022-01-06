@@ -1,4 +1,4 @@
-// export * from './models'
+export * from './models'
 // export * from './fetchers'
 // export * from './react-bindings'
 // export * from './firebase-adapter-live'
@@ -8,5 +8,3 @@
 // export * from './create-firework-service'
 // export * from './query-fetcher'
 // export * from './test-and-debug-tools'
-
-export * from './models'

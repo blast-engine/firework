@@ -1,28 +1,28 @@
-import { createMixableClass } from '@blast-engine/mixable'
-import { ensure } from '../../ensure.function'
-import { Query } from '../query.class'
+export const provisionFullNodeQueryModel = provisions => 
+  provisions.createMixableClass({
+    name: 'FullNodeQuery',
+    inherits: [ provisions.queries.Query ],
+    provisions,
+    body: class {
+      
+      _constructor({ path } = {}) {
+        this._provisions.ensure({
+          check: () => typeof path === 'string',
+          failMsg: 'FullNodeQuery needs a string path'
+        })
 
-export const FullNodeQuery = createMixableClass({
-  name: 'FullNodeQuery',
-  inherits: [ Query ],
-  body: class {
-    
-    _constructor(args = {}) {
-      ensure('FullNodeQuery is given a string path', () => typeof args.path === 'string')
-      this._type = 'full-node'
-      this._path = args.path
+        this._path = path
+      }
+
+      type() { return 'full-node' }
+      path() { return this._path }
+
+      equals(query) {
+        return (
+          this.typeEquals(query)
+          && this.path() === query.path()
+        )
+      }
+
     }
-
-    equals(query) {
-      return (
-        this.typeEquals(query)
-        && this.path() === query.path()
-      )
-    }
-
-    path(){
-      return this._path
-    }
-
-  }
-})
+  })

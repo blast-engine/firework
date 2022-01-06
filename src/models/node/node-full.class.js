@@ -17,16 +17,22 @@ export const Node = createMixableClass({
       this._query = query
     }
 
-    isLoaded() { return this._data !== undefined }
+    isLoaded() { 
+      return this._data !== undefined 
+    }
 
     isEmpty() {
       this._ensureLoaded()
       return this._data === null
     }
 
-    get(path) { return this.data(path) }
+    get(path) { 
+      this._ensureLoaded()
+      return this.data(path) 
+    }
 
     data(path) {
+      this._ensureLoaded()
       if (!path) return this._data
 
       const val = u.get(
